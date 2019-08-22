@@ -1,3 +1,5 @@
+import readline
+
 from logger import Logger
 from viewer import Viewer
 from statistics import Statistics
