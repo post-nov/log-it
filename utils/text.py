@@ -17,7 +17,7 @@ def _get_columns():
 
 def _get_line_width(columns):
     terminal_width = terminal.get_terminal_width()
-    size_of_vertical_bars = 5
+    size_of_vertical_bars = 5  # '|' - vertical bar
     size_of_other_columns = sum([columns['date'],
                                  columns['time'],
                                  columns['score']])
@@ -30,18 +30,18 @@ def _cell(length, content):
     etc. centers content.
     """
     content = str(content)[:length]
-    content_length = len(content)
-    gap_length = length - content_length
-    first_gap = gap_length // 2
-    second_gap = gap_length - first_gap
-    return (first_gap*' ' + content + second_gap*' ')
+    centered_content = "{:^{length}}".format(content, length=length)
+    return centered_content
 
 
 def _head_row():
     "Creates row with column names"
     head_row = []
-    for column in _get_columns():
-        cell = _cell(_get_columns()[column], column.upper())
+    columns = _get_columns()
+    headers = list(columns.keys())
+    widths = list(columns.values())
+    for header, width in zip(headers, widths):
+        cell = _cell(width, header)
         head_row.append(cell)
     return '|'.join(head_row)
 
@@ -49,8 +49,10 @@ def _head_row():
 def _table_row(record):
     "Creates row containing data from a record"
     table_row = []
-    for column, length in zip(record[1:], _get_columns().values()):
-        cell = _cell(length, column)
+    columns = _get_columns()
+    widths = list(columns.values())
+    for column, width in zip(record[1:], widths):
+        cell = _cell(width, column)
         table_row.append(cell)
     return '|'.join(table_row)
 
@@ -70,21 +72,27 @@ def pretty_tables(tables):
     print()
 
 
-def pretty_print(text):
-    if isinstance(text, list):
-        max_l = 0
-        for sentence in text:
-            if isinstance(sentence, tuple):
-                if len(sentence[0]) > max_l:
-                    max_l = len(sentence[0])
-        for sentence in text:
-            if isinstance(sentence, tuple):
-                desired_spaces = max_l - len(sentence[0])
-                print('# ' + sentence[0] + desired_spaces*' ' + ' - ' + sentence[1])
-            else:
-                print('# ' + sentence)
-    else:
-        print('# ' + text)
+def _get_max_length(*text):
+    all_lengths = []
+    for sentence in text:
+        if isinstance(sentence, str):
+            all_lengths.append(len(sentence))
+        elif isinstance(sentence, tuple):
+            all_lengths.append(len(sentence[0]))
+        else:
+            raise ValueError('Only strings or tuples are supported')
+    return max(all_lengths)
+
+
+def pretty_print(*text):
+    max_length = _get_max_length(*text)
+    print()
+    for sentence in text:
+        if isinstance(sentence, str):
+            print('# ' + sentence)
+        elif isinstance(sentence, tuple):
+            desired_spaces = max_length - len(sentence[0])
+            print('# ' + sentence[0] + desired_spaces*' ' + ' - ' + sentence[1])
     print()
 
 
@@ -92,3 +100,11 @@ def pretty_input():
     x = input(INPUT)
     print()
     return x.lower()
+
+
+if __name__ == '__main__':
+    pretty_print('TEXT')
+    pretty_print('TEXT', 'ANOTHER TEXT')
+    pretty_print('TEXT', ('WITH', 'TUPLE'))
+    pretty_print('TEXT', ('WITH', 'TUPLE'), ('WITH DIFFERENT WIDTH', 'ELPUT'), ('WE', 'T'))
+    pretty_print('FIRST PART', ('TUPLE WITH', 'OPTION'), 'SECOND PART')

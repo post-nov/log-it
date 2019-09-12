@@ -1,6 +1,6 @@
 import sheet
 import entry
-import calen
+from utils import calen
 from utils.terminal import clear_screen
 from utils.text import (pretty_print,
                         pretty_input,

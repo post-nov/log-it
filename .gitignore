@@ -1,5 +1,8 @@
+# Local project's apps
 sheet.db
 bu.txt
+test.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

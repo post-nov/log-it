@@ -1,6 +1,10 @@
 import datetime
 import sheet
 
+# Fix to import from directory above
+import sys
+sys.path.append('..')
+
 
 def _dates():
     records = sheet.list_all_records()
