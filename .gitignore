@@ -1,7 +1,8 @@
 # Local project's apps
-sheet.db
 bu.txt
 test.py
+sheet.db
+script.sql
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

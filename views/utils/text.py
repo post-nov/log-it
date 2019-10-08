@@ -63,13 +63,12 @@ def pretty_tables(tables):
         tables = [tables]
     width_of_table = sum(list(_get_columns().values()))+5
 
-    print('-'*width_of_table)
-    print('|' + _head_row() + '|')
-    print('-'*width_of_table)
-    for row in tables:
-        print('|' + _table_row(row) + '|')
-    print('-'*width_of_table)
-    print()
+    head_of_table = ('-'*width_of_table+'\n'
+                     + '-'*width_of_table+'\n'
+                     + '-'*width_of_table+'\n')
+    core_table = '\n'.join([('|' + _table_row(row) + '|') for row in tables])
+    bottom_of_table = ('-'*width_of_table+'\n')
+    return (head_of_table + core_table + bottom_of_table)
 
 
 def _get_max_length(*text):
@@ -84,21 +83,23 @@ def _get_max_length(*text):
     return max(all_lengths)
 
 
-def pretty_print(*text):
+def pretty_print(*text, with_spaces=True):
     max_length = _get_max_length(*text)
-    print()
+    # if with_spaces:
+    #     print()
     for sentence in text:
         if isinstance(sentence, str):
             print('# ' + sentence)
         elif isinstance(sentence, tuple):
             desired_spaces = max_length - len(sentence[0])
             print('# ' + sentence[0] + desired_spaces*' ' + ' - ' + sentence[1])
-    print()
+    if with_spaces:
+        print()
 
 
 def pretty_input():
     x = input(INPUT)
-    print()
+    # print()
     return x.lower()
 
 
