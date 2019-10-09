@@ -53,7 +53,6 @@ class SQLQueryCreator(SQLQuery):
         query_answers_int = """
         CREATE TABLE IF NOT EXISTS answers_int
         (
-        id           INTEGER PRIMARY KEY,
         id_of_answer INTEGER,
         value        INTEGER,
 
@@ -67,7 +66,6 @@ class SQLQueryCreator(SQLQuery):
         query_answers_str = """
         CREATE TABLE IF NOT EXISTS answers_str
         (
-        id           INTEGER PRIMARY KEY,
         id_of_answer INTEGER,
         value        TEXT,
 
@@ -139,28 +137,3 @@ class SQLQueryCreator(SQLQuery):
             self.cur.execute(query)
             self.conn.commit()
             print(index, 'executed')
-
-    def create_questions_group(self, name):
-        query = """
-        INSERT INTO questions_groups (name)
-        VALUES (?)
-        """
-        self.cur.execute(query, (name,))
-        self.conn.commit()
-
-    def create_question(self, name_of_group, text, type, max_value=None):
-        query = """
-        INSERT INTO questions (name_of_group, text, type, max_value)
-        VALUES (?, ?, ?, ?)
-        """
-        self.cur.execute(query, (name_of_group, text, type, max_value))
-        self.conn.commit()
-
-    def create_tag(self, id_of_question, *tags):
-        query = """
-        INSERT INTO tags (id_of_question, name)
-        VALUES (?, ?)
-        """
-        for tag in tags:
-            self.cur.execute(query, (id_of_question, tag))
-            self.conn.commit()

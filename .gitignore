@@ -3,6 +3,7 @@ bu.txt
 test.py
 sheet.db
 script.sql
+sheet/tester.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
