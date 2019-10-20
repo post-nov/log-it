@@ -1,4 +1,4 @@
-from base import SQLQuery
+from .base import SQLQuery
 
 
 class SQLQueryCreator(SQLQuery):
@@ -133,7 +133,6 @@ class SQLQueryCreator(SQLQuery):
             query_records
         ]
 
-        for index, query in enumerate(queries):
+        for query in queries:
             self.cur.execute(query)
             self.conn.commit()
-            print(index, 'executed')

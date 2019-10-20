@@ -1,4 +1,4 @@
-from base import SQLQuery
+from .base import SQLQuery
 
 
 class SQLQueryManager(SQLQuery):
