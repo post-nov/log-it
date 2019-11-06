@@ -4,44 +4,57 @@
 <head>
     <meta charset="utf-8">
     <title>SAME SHEET | {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static "css/base.css" %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style media="screen">
+        body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        }
+        main {
+        flex: 1 0 auto;
+        }
+    </style>
     {% block style %}{% endblock %}
 </head>
 <body>
-    <div class="container">
-        <nav id="navbar">
-            <ul id="nav-menu">
-                <li><a href="{% url 'home' %}">HOME</a></li>
+    <nav class="nav-wrapper blue">
+        <div class="container">
+            <ul class="left">
+                <li><a href="{% url 'home' %}">Главная</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'sheets' %}">SHEEEEEEEETS</a></li>
+                <li><a href="{% url 'sheets' %}">SHEETS</a></li>
                 {% endif %}
-                <li><a href="#">ABOUT</a></li>
-                <li><a href="#">CONTACTS</a></li>
+                <li><a href="#">Информация</a></li>
+                <li><a href="#">Контакты</a></li>
             </ul>
-            <ul id="nav-user">
+            <ul class="right">
                 {% if user.is_authenticated %}
                      <li><a href="#">{{ user.username|title }}</a></li>
-                     <li><a href="{% url 'logout' %}">Logout</a></li>
+                     <li><a href="{% url 'logout' %}">Выйти</a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'registration' %}">Register</a></li>
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                    <li><a href="{% url 'registration' %}">Зарегистрироваться</a></li>
                 {% endif %}
             </ul>
-        </nav>
-
-        <div class="content">
-            {% if messages %}
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% block content %}
-        {% endblock %}
         </div>
+    </nav>
 
-        <footer>
-            <p>2019 &copy; <a href="https://www.github.com/user/post-nov">post-nov</a></p>
-        </footer>
-    </div>
+    <main class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+    </main>
+
+    <footer class="page-footer blue">
+            <p class="center">2019 &copy; <a class="white-text"href="https://www.github.com/user/post-nov">post-nov</a></p>
+    </footer>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>

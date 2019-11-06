@@ -6,48 +6,50 @@ NEW SHEET
 {% endblock %}
 
 {% block style %}
-    <!-- <link rel="stylesheet" href="{% static "css/addition/newSheet.css" %}"> -->
 {% endblock %}
 
 {% block content %}
 
 <main>
 
-    <h2>Create new sheet</h2>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form_name.as_p }}
-        <table>
-            {{ formset_question.management_form }}
-            {% for form in formset_question %}
-                {% if forloop.first %}
-                    <thead>
+    <h2 class="center">Создать новый ШИТ</h2>
+    <div class="row">
+        <div class="col s8 offset-s2 center">
+            <form method="post">
+                {% csrf_token %}
+                {{ form_name.as_p }}
+                <table class="striped centered">
+                    {{ formset_question.management_form }}
+                    {% for form in formset_question %}
+                        {% if forloop.first %}
+                            <thead>
+                                <tr>
+                                    {% for field in form.visible_fields %}
+                                        <th>{{ field.label|capfirst }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                        {% endif %}
                         <tr>
                             {% for field in form.visible_fields %}
-                                <th>{{ field.label|capfirst }}</th>
+                            <td>
+                                {% if forloop.first %}
+                                    {% for hidden in form.hidden_fields %}
+                                        {{ hidden }}
+                                    {% endfor %}
+                                {% endif %}
+                                {{ field.errors.as_ul }}
+                                {{ field }}
+                            </td>
                             {% endfor %}
                         </tr>
-                    </thead>
-                {% endif %}
-                <tr>
-                    {% for field in form.visible_fields %}
-                    <td>
-                        {% if forloop.first %}
-                            {% for hidden in form.hidden_fields %}
-                                {{ hidden }}
-                            {% endfor %}
-                        {% endif %}
-                        {{ field.errors.as_ul }}
-                        {{ field }}
-                    </td>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-        </table>
-        <button class="button" type="Submit" name="button" value="Save">Create</button>
+                </table>
 
-    </form>
+                <a class="waves-effect waves-light blue btn" type="Submit" name="button" value="Save">Create</a>
+            </form>
+        </div>
+    </div>
 </main>
 
 {% endblock %}

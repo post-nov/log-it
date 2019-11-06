@@ -6,38 +6,57 @@ SHEETS
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static "css/browsing/sheets.css" %}">
 {% endblock %}
 
 {% block content %}
 
 <main>
-    <h2>{{ user.username|title }}, this is your sheet!</h2>
+    <h4 class="center">{{ user.username|title }}, вот ваши ШИТы!</h4>
 
     {% if sheets %}
-        <table>
-            <tr>
-                <th style="width:100%">
-                    Name
-                </th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-            {% for sheet in sheets %}
-            <tr>
-                    <td>{{ sheet.name }}</td>
-                    <td><a href="{% url 'sheet_details' sheet.name %}">View</a></td>
-                    <td><a class="green-button" href="{% url 'record_new' sheet.name %}">Add</a></td>
-                    <td><a href="#">Statistics</a></td>
-                    <td><a class="red-button" href="{% url 'sheet_delete' sheet.name %}">Delete</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="row">
+            <div class="col s8 center offset-s2">
+                <table class="highlight ">
+                    <thead>
+                        <tr>
+                            <!-- <th style="width:100%">Name</th> -->
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for sheet in sheets %}
+                        <tr>
+                            <td><a href="{% url 'sheet_details' sheet.name %}">{{ sheet.name }}</a></td>
+                            <td class="right">
+                                <a class="waves-effect waves-red btn-flat red-text" href="{% url 'sheet_delete' sheet.name %}">
+                                    Удалить
+                                </a>
+                            </td>
+                            <td class="right">
+                                <a class="waves-effect waves-teal btn-flat teal-text" href="#">
+                                    Статистика
+                                </a>
+                            </td>
+                            <td class="right">
+                                <a class="waves-effect waves-green btn-flat green-text" href="{% url 'record_new' sheet.name %}">
+                                    Добавить
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     {% endif %}
 
-    <p><a href="{% url 'sheet_new' %}">Create new sheet</a></p>
+    <br>
+
+    <p class="center"><a class="waves-effect waves-light btn blue" href="{% url 'sheet_new' %}">Создать новый ШИТ</a></p>
 
 </main>
 
