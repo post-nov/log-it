@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+NEW RECORD FOR {{ sheet.name|upper }}
+{% endblock %}
+
+{% block style %}
+    <!-- <link rel="stylesheet" href="{% static "css/addition/newSheet.css" %}"> -->
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <h2>Add new record for {{ sheet.name|capfirst }}</h2>
+
+    <form method="post">
+        {{ form_date.as_p }}
+        {% csrf_token %}
+            {% for form in form_answers %}
+                {{ form.as_p }}
+            {% endfor %}
+        <button class="button" type="Submit" name="button" value="Save">Add</button>
+    </form>
+</main>
+
+{% endblock %}

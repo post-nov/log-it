@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+LOGIN
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static "css/user/login.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <h1>Login</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <br>
+        <button class="button" type="Submit" name="button">Submit</button>
+    </form>
+
+    If you don't have an account <a href="{% url 'registration' %}"><strong>register</strong></a> instead.
+
+</main>
+
+{% endblock %}

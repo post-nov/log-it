@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Удалить запись {{ record.id }}
+{% endblock %}
+
+{% block style %}
+    <!-- <link rel="stylesheet" href="{% static "css/addition/newSheet.css" %}"> -->
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <h2>Вы планируете удалить запись за {{ record.date|date:"D d M Y" }}</h2>
+
+    {% for question, answer in questions_answers %}
+        <p>{{ question.name }}</p>
+        <p>{{ answer }}</p>
+    {% endfor %}
+    <p>Вы уверены?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="Submit" name="button" value="Save">Удалить</button>
+    </form>
+    <form action="{% url 'sheet_details' sheet.name %}">
+        <input type="submit" value="Отмена" />
+    </form>
+
+</main>
+
+{% endblock %}

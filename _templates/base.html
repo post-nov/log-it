@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>SAME SHEET | {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static "css/base.css" %}">
+    {% block style %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <nav id="navbar">
+            <ul id="nav-menu">
+                <li><a href="{% url 'home' %}">HOME</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'sheets' %}">SHEEEEEEEETS</a></li>
+                {% endif %}
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">CONTACTS</a></li>
+            </ul>
+            <ul id="nav-user">
+                {% if user.is_authenticated %}
+                     <li><a href="#">{{ user.username|title }}</a></li>
+                     <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'registration' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div class="content">
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% block content %}
+        {% endblock %}
+        </div>
+
+        <footer>
+            <p>2019 &copy; <a href="https://www.github.com/user/post-nov">post-nov</a></p>
+        </footer>
+    </div>
+</body>
+</html>

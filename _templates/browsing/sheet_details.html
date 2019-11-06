@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+{{ sheet.name|capfirst }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static "css/browsing/sheet_details.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <h2>{{ user.username|title }}, this is your sheet named {{ sheet.name|capfirst }}!</h2>
+
+    <table>
+        <tr>
+            <th>Number</th>
+            <th style="width:100%">Question</th>
+            <th>Type</th>
+            <th>Max value</th>
+        </tr>
+        {% for question in questions %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ question.name }}</td>
+            <td>{{ question.type }}</td>
+            <td>{{ question.max_value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    {% if records %}
+    <table>
+        <tr>
+            <th>Date</th>
+            {% for question in questions %}
+                <th>{{ forloop.counter }}</th>
+            {% endfor %}
+            <th></th>
+        </tr>
+        {% for record, answers in records %}
+        <tr>
+            <th>{{ record.date }}</th>
+            {% for answer in answers %}
+                <td>{{ answer }}</td>
+            {% endfor %}
+            <th><a href="{% url 'record_delete' sheet.name record.id %}">Удалить</a></th>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+</main>
+
+{% endblock %}

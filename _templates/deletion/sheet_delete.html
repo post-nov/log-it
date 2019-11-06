@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+DELETE {{ sheet.name|capfirst }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static "css/deletion/sheet_delete.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <h3>Вы собираетесь удалить таблицу {{ sheet.name }}</h3>
+    {% if number_of_records %}
+        <p>В настоящий момент в ней {{ number_of_records }} записей.</p>
+        <p>После удаления они безвозвратно пропадут.</p>
+    {% endif %}
+    <p>Вы уверены, что готовы пойти на этот шаг?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="button" type="Submit" name="button" value="Save">УДАЛИТЬ</button>
+    </form>
+    <a href="{% url 'sheets' %}">Вернуться к таблицам</a>
+</main>
+
+{% endblock %}

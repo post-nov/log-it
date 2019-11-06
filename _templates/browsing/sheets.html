@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+SHEETS
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static "css/browsing/sheets.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <h2>{{ user.username|title }}, this is your sheet!</h2>
+
+    {% if sheets %}
+        <table>
+            <tr>
+                <th style="width:100%">
+                    Name
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for sheet in sheets %}
+            <tr>
+                    <td>{{ sheet.name }}</td>
+                    <td><a href="{% url 'sheet_details' sheet.name %}">View</a></td>
+                    <td><a class="green-button" href="{% url 'record_new' sheet.name %}">Add</a></td>
+                    <td><a href="#">Statistics</a></td>
+                    <td><a class="red-button" href="{% url 'sheet_delete' sheet.name %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <p><a href="{% url 'sheet_new' %}">Create new sheet</a></p>
+
+</main>
+
+{% endblock %}
