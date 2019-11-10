@@ -11,18 +11,33 @@ DELETE {{ sheet.name|capfirst }}
 
 {% block content %}
 
-<main>
-    <h3>Вы собираетесь удалить таблицу {{ sheet.name }}</h3>
-    {% if number_of_records %}
-        <p>В настоящий момент в ней {{ number_of_records }} записей.</p>
-        <p>После удаления они безвозвратно пропадут.</p>
-    {% endif %}
-    <p>Вы уверены, что готовы пойти на этот шаг?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button class="button" type="Submit" name="button" value="Save">УДАЛИТЬ</button>
-    </form>
-    <a href="{% url 'sheets' %}">Вернуться к таблицам</a>
+<main class="center-align">
+
+    <div class="mv-3">
+        <h4>Вы собираетесь удалить таблицу</h4>
+        <h4><strong>{{ sheet.name }}</strong></h4>
+    </div>
+
+    <div class="mv-5">
+        {% if number_of_records %}
+            <h5>В настоящий момент в ней {{ number_of_records }} записей.</h5>
+            <h5>После удаления они безвозвратно пропадут.</h5>
+        {% endif %}
+        <h5>Вы уверены, что готовы пойти на этот шаг?</h5>
+    </div>
+
+    <div class="row">
+        <div class="col s6 right-align">
+            <form method="post">
+                {% csrf_token %}
+                <button class="waves-effect waves-light red btn" type="submit" name="action">УДАЛИТЬ</button>
+            </form>
+        </div>
+        <div class="col s6 left-align">
+            <a class="waves-effect waves-light btn" href="{% url 'sheets' %}">ОТМЕНА</a>
+        </div>
+    </div>
+
 </main>
 
 {% endblock %}

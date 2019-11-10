@@ -1,7 +1,10 @@
+import logging
+
 from django.utils import timezone
 from django.forms import formset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.contrib import messages
 from django.views.generic import ListView, CreateView
 from .forms import (
     NewSheetNameForm,
@@ -22,14 +25,38 @@ from .models import (
     Tag,
 )
 
+logger = logging.Logger('ERROR')
+
 
 class SheetsView(ListView):
+
     template_name = 'browsing/sheets.html'
     context_object_name = 'sheets'
 
     def get_queryset(self):
         users_sheets = Sheet.objects.filter(user=self.request.user)
         return users_sheets
+
+
+def sheets_view(request):
+
+    template_name = 'browsing/sheets.html'
+
+    sheets = Sheet.objects.filter(user=request.user)
+    records_counter = []
+    for sheet in sheets:
+        records_counter.append(
+            Record.objects.filter(sheet=sheet).count()
+        )
+    sheets_records = zip(sheets, records_counter)
+
+    logger.error(sheets_records)
+
+    context = {'sheets_records': sheets_records}
+
+    logger.error(context)
+
+    return render(request, template_name, context)
 
 
 def sheet_new_view(request):
@@ -69,6 +96,7 @@ def sheet_new_view(request):
                     'form_name': NewSheetNameForm,
                     'formset_question': formset_question,
                 })
+
     return render(
         request,
         'addition/sheet_new.html',
@@ -82,9 +110,10 @@ def sheet_details_view(request, sheet_name):
     template_name = 'browsing/sheet_details.html'
 
     sheet = get_object_or_404(Sheet, name=sheet_name, user=request.user)
-    records = Record.objects.filter(sheet=sheet)
+    records = Record.objects.filter(sheet=sheet).order_by('-id')
     questions = Question.objects.filter(sheet=sheet)
     records_answers = []
+
     for record in records:
         single_record_answers = []
         answers = Answer.objects.filter(record=record)
@@ -108,14 +137,18 @@ def sheet_details_view(request, sheet_name):
 
 
 def sheet_delete_view(request, sheet_name):
+
     template_name = 'deletion/sheet_delete.html'
 
     sheet = Sheet.objects.get(name=sheet_name)
     number_of_records = len(Record.objects.filter(sheet=sheet))
+
     context = {'sheet': sheet, 'number_of_records': number_of_records}
 
     if request.method == 'POST':
+        messages.success(request, "Таблица {} удалена".format(sheet.name))
         sheet.delete()
+
         return redirect('sheets')
 
     return render(request, template_name, context)
@@ -168,7 +201,10 @@ def record_new_view(request, sheet_name):
                             tag.save()
                         answer_tag.tag.add(tag)
 
+                messages.success(request, "Новая запись добавлена".format(sheet.name))
+
         else:
+
             context = {
                 'sheet': sheet,
                 'form_answers': form_answers,
@@ -184,6 +220,8 @@ def record_new_view(request, sheet_name):
         for question in questions:
             form_answer = NewAnswerForm(
                 label=question.name,
+                type=question.type,
+                max_value=question.max_value,
             )
             form_answers.append(form_answer)
 

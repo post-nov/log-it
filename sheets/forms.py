@@ -9,7 +9,7 @@ from .models import (
 
 
 class NewSheetNameForm(forms.Form):
-    name = forms.CharField(label='Choose name for your new sheet')
+    name = forms.CharField(label='Выберите имя для вашей ШИТ')
 
 
 class NewSheetQuestionForm(forms.Form):
@@ -19,9 +19,9 @@ class NewSheetQuestionForm(forms.Form):
     )
 
     TYPE_CHOICES = [
-        ('STR', 'String'),
-        ('INT', 'Integer'),
-        ('TAG', 'Tags'),
+        ('STR', 'СТРОКА'),
+        ('INT', 'ЧИСЛО'),
+        ('TAG', 'ТЭГИ'),
     ]
 
     type = forms.ChoiceField(
@@ -54,6 +54,7 @@ class NewAnswerForm(forms.Form):
         self.label = kwargs.pop('label')
         super(NewAnswerForm, self).__init__(*args, **kwargs)
         self.fields['value'].label = self.label
+        self.fields['value'].help_text = 'Это обязательное поле'
         self.type = type
         self.max_value = max_value
 

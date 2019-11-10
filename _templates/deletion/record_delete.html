@@ -21,7 +21,7 @@
     <p>Вы уверены?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="Submit" name="button" value="Save">Удалить</button>
+        <button class="waves-effect waves-light red btn center-align" type="submit" name="action">УДАЛИТЬ</button>
     </form>
     <form action="{% url 'sheet_details' sheet.name %}">
         <input type="submit" value="Отмена" />

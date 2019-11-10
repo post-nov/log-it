@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
-    SheetsView,
+    # SheetsView,
+    sheets_view,
     sheet_new_view,
     sheet_details_view,
     sheet_delete_view,
@@ -9,7 +10,8 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', SheetsView.as_view(), name='sheets'),
+    # path('', SheetsView.as_view(), name='sheets'),
+    path('', sheets_view, name='sheets'),
     path('new', sheet_new_view, name='sheet_new'),
     path('<str:sheet_name>', sheet_details_view, name='sheet_details'),
     path('<str:sheet_name>/add', record_new_view, name='record_new'),

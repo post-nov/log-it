@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}
 NEW SHEET
@@ -8,48 +9,111 @@ NEW SHEET
 {% block style %}
 {% endblock %}
 
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('select').formSelect();
+});
+$(document).ready(function() {
+    $('.collapsible').collapsible();
+});
+</script>
+{% endblock js %}
+
 {% block content %}
 
 <main>
 
-    <h2 class="center">Создать новый ШИТ</h2>
-    <div class="row">
-        <div class="col s8 offset-s2 center">
-            <form method="post">
-                {% csrf_token %}
-                {{ form_name.as_p }}
-                <table class="striped centered">
-                    {{ formset_question.management_form }}
-                    {% for form in formset_question %}
-                        {% if forloop.first %}
-                            <thead>
-                                <tr>
-                                    {% for field in form.visible_fields %}
-                                        <th>{{ field.label|capfirst }}</th>
-                                    {% endfor %}
-                                </tr>
-                            </thead>
-                        {% endif %}
-                        <tr>
-                            {% for field in form.visible_fields %}
-                            <td>
-                                {% if forloop.first %}
-                                    {% for hidden in form.hidden_fields %}
-                                        {{ hidden }}
-                                    {% endfor %}
-                                {% endif %}
-                                {{ field.errors.as_ul }}
-                                {{ field }}
-                            </td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </table>
+    {# <h5 class="center">Создать новую таблицу</h5> #}
 
-                <a class="waves-effect waves-light blue btn" type="Submit" name="button" value="Save">Create</a>
-            </form>
+    <p class="center-align">На этой странице вам предстоит создавать таблицы, которые будут объединять группы вопросов, на которые вам предстоит отвечать. Каждый вопрос состоит из трех компонентов:</p>
+    <div class="row">
+        <div class="col s6 offset-s3">
+            <ul class="collapsible">
+                <li>
+                    <div class="collapsible-header">Вопрос</div>
+                    <div class="collapsible-body"><span>Именно на него вы будете отвечать, когда будете добавлять записи в данную таблицу</span></div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Тип</div>
+                    <div class="collapsible-body">Здесь вам нужно выбрать тип вопроса. Он может быть <strong>СТРОКОЙ</strong>, <strong>ЧИСЛОМ</strong> или набором <strong>ТЭГОВ</strong>.</div>
+                </li>
+                <li>
+                    <div class="collapsible-header">Максимальное значение</div>
+                    <div class="collapsible-body">
+                        <span>Если вы хотите ограничить себя в допустимых вариантах, то можете указать максимальное значение для вопроса</span>
+                        <ul>
+                            <li>
+                                Для <strong>СТРОКИ</strong> это значение будет указывать максимальное количество знаков в ответе
+                            </li>
+                            <li>
+                                Для <strong>ЧИСЛА</strong>, соответственно, максимальное число
+                            </li>
+                            <li>
+                                Для <strong>ТЭГОВ</strong> это количество тэгов
+                            </li>
+                        </ul>
+                        <span>Данный пункт опционален, поэтому можете смело его пропускать, если не видите в нем для себя смысла. Я вот вижу.</span>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
+
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form_name.name }}
+                <label>Название вашей новой таблицы</label>
+            </div>
+
+            {{ formset_question.management_form }}
+
+            {% for form in formset_question %}
+                {% comment %}
+                {% if forloop.first %}
+                    <thead>
+                        <tr>
+                            {% for field in form.visible_fields %}
+                                <th>{{ field.label|capfirst }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                {% endif %}
+                {% endcomment %}
+                    {% comment %}
+                    {% for field in form.visible_fields %}
+                    <td>
+                        {% if forloop.first %}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ field.errors.as_ul }}
+                        {{ field. }}
+                    </td>
+                    {% endfor %}
+                    {% endcomment %}
+                        <div class="input-field col s8">
+                            {{ form.name }}
+                            <label>Вопрос</label>
+                        </div>
+                        <div class="input-field col s2">
+                            {{ form.type }}
+                            <label>Тип</label>
+                        </div>
+                        <div class="input-field col s2">
+                            {% render_field form.max_value type="text" %}
+                            <label>Max</label>
+                        </div>
+            {% endfor %}
+        </div>
+        <div class="center-align" style="margin-bottom:2rem">
+            <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Создать</button>
+        </div>
+    </form>
 </main>
 
 {% endblock %}

@@ -2,10 +2,20 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>SAME SHEET | {% block title %}{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+    <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {% block js %}
+    {% endblock js %}
+
+    {# Style to make footer sticky to bottom #}
     <style media="screen">
         body {
         display: flex;
@@ -16,15 +26,17 @@
         flex: 1 0 auto;
         }
     </style>
+
     {% block style %}{% endblock %}
 </head>
 <body>
+
     <nav class="nav-wrapper blue">
         <div class="container">
             <ul class="left">
                 <li><a href="{% url 'home' %}">Главная</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'sheets' %}">SHEETS</a></li>
+                <li><a href="{% url 'sheets' %}"><strong>Таблицы</strong></a></li>
                 {% endif %}
                 <li><a href="#">Информация</a></li>
                 <li><a href="#">Контакты</a></li>
@@ -42,12 +54,6 @@
     </nav>
 
     <main class="container">
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-
     {% block content %}
     {% endblock %}
     </main>
@@ -55,6 +61,32 @@
     <footer class="page-footer blue">
             <p class="center">2019 &copy; <a class="white-text"href="https://www.github.com/user/post-nov">post-nov</a></p>
     </footer>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 </body>
+
+{% comment %}
+<style media="screen">
+#toast-container {
+top: auto !important;
+right: auto !important;
+bottom: 10%;
+left:50%;
+}
+</style>
+{% endcomment %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success'%}
+            <script>M.toast({html: "{{message}}", classes: 'green', displayLength:2000});</script>
+        {% elif message.tags == 'info'%}
+            <script>M.toast({html: "{{message}}", classes: 'blue', displayLength:2000});</script>
+        {% elif message.tags == 'warning'%}
+            <script>M.toast({html: "{{message}}", classes: 'orange', displayLength:10000});</script>
+        {% elif message.tags == 'error'%}
+            <script>M.toast({html: "{{message}}", classes: 'red', displayLength:10000});</script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
 </html>

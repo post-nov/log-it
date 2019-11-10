@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 MY_APPS = [
     'home.apps.HomeConfig',
     'sheets.apps.SheetsConfig',
+    'widget_tweaks',
 ]
 
 CORE_APPS = [

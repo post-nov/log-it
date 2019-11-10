@@ -20,7 +20,7 @@ def registration_view(request):
             username = form.cleaned_data.get('username')
             messages.success(request, f"New account created: {username}")
             login(request, user)
-            return redirect('home')
+            return redirect('sheets')
 
         else:
             for msg in form.error_messages:
@@ -54,7 +54,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, 'You are now logged in as {}'.format(username))
-                return redirect('home')
+                return redirect('sheets')
             else:
                 messages.error(request, 'Invalid password or username')
         else:

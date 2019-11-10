@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}
 NEW RECORD FOR {{ sheet.name|upper }}
@@ -8,19 +9,48 @@ NEW RECORD FOR {{ sheet.name|upper }}
 {% block style %}
     <!-- <link rel="stylesheet" href="{% static "css/addition/newSheet.css" %}"> -->
 {% endblock %}
+{% block js %}
+<script>
+$(document).ready(function(){
+    $('.datepicker').datepicker({
+        format: "yyyy-mm-dd"
+    });
+});
+</script>
+{% endblock js %}
 
 {% block content %}
 
 <main>
-    <h2>Add new record for {{ sheet.name|capfirst }}</h2>
-
+    <h4 class="center-align">Добавить новую запись для <strong>{{ sheet.name|capfirst }}</strong></h4>
+    <br>
     <form method="post">
-        {{ form_date.as_p }}
+        {% render_field form_date.date type="text" class="datepicker" %}
         {% csrf_token %}
             {% for form in form_answers %}
-                {{ form.as_p }}
+            <div class="input-field">
+                {{ form.value }}
+                <label>{{ form.label }}</label>
+                {% if form.non_field_errors %}
+                    <span class="helper-text red-text">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </span>
+                {% else %}
+                    <span class="helper-text" data-error="WRONG DUDE">
+                        Тип: {{ form.type }}
+                        {% if form.max_value %}
+                            Max: {{ form.max_value }}
+                        {% endif %}
+                    </span>
+                {% endif %}
+                <br>
+            </div>
             {% endfor %}
-        <button class="button" type="Submit" name="button" value="Save">Add</button>
+            <div class="center-align" style="margin-bottom:2rem">
+                <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Добавить</button>
+            </div>
     </form>
 </main>
 

@@ -5,17 +5,25 @@
 SHEETS
 {% endblock %}
 
-{% block style %}
+{% block js %}
+<script>
+$(document).ready(function(){
+    $('.tooltipped').tooltip({
+        enterDelay:100,
+        exitDelay:0,
+        inDuration:50,
+        outDuration:50,
+    });
+});
+</script>
 {% endblock %}
-
 {% block content %}
 
-<main>
-    <h4 class="center">{{ user.username|title }}, вот ваши ШИТы!</h4>
+    <h4 class="center mv-4">{{ user.username|title }}, вот ваши таблицы!</h4>
 
-    {% if sheets %}
+    {% if sheets_records %}
         <div class="row">
-            <div class="col s8 center offset-s2">
+            <div class="col l8 center offset-l2">
                 <table class="highlight ">
                     <thead>
                         <tr>
@@ -28,22 +36,36 @@ SHEETS
                     </thead>
 
                     <tbody>
-                    {% for sheet in sheets %}
+                    {% for pair in sheets_records %}
                         <tr>
-                            <td><a href="{% url 'sheet_details' sheet.name %}">{{ sheet.name }}</a></td>
-                            <td class="right">
-                                <a class="waves-effect waves-red btn-flat red-text" href="{% url 'sheet_delete' sheet.name %}">
-                                    Удалить
+                            <td>
+                                <a href="{% url 'sheet_details' pair.0.name %}">{{ pair.0.name }}
+                                {% if pair.1 %}
+                                    <span class="badge">{{ pair.1}}</span>
+                                {% else %}
+                                    <span class="badge blue new" data-badge-caption="Новая"></span>
+                                {% endif %}
                                 </a>
                             </td>
                             <td class="right">
-                                <a class="waves-effect waves-teal btn-flat teal-text" href="#">
-                                    Статистика
+                                <a class="waves-effect waves-red btn-flat red-text tooltipped" data-position="top" data-tooltip="Удалить" href="{% url 'sheet_delete' pair.0.name %}">
+                                    <i class="material-icons">delete</i>
                                 </a>
                             </td>
                             <td class="right">
-                                <a class="waves-effect waves-green btn-flat green-text" href="{% url 'record_new' sheet.name %}">
-                                    Добавить
+                                <a class="waves-effect waves-teal btn-flat teal-text tooltipped" data-position="top" data-tooltip="Статистика" href="#">
+                                    <i class="material-icons">assessment</i>
+                                </a>
+                            </td>
+                            <td class="right">
+                                <a
+                                class="waves-effect waves-green btn-flat green-text tooltipped"
+                                data-position="top"
+                                data-tooltip="Добавить новую запись"
+                                href="{% url 'record_new' pair.0.name %}"
+                                style="display: inline-flex; vertical-align:middle">
+                                    <i class="material-icons">add</i>
+                                    {# Добавить #}
                                 </a>
                             </td>
                         </tr>
@@ -56,8 +78,6 @@ SHEETS
 
     <br>
 
-    <p class="center"><a class="waves-effect waves-light btn blue" href="{% url 'sheet_new' %}">Создать новый ШИТ</a></p>
-
-</main>
+    <p class="center"><a class="waves-effect waves-light btn blue" href="{% url 'sheet_new' %}">Создать новую таблицу</a></p>
 
 {% endblock %}
