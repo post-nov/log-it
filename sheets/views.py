@@ -140,7 +140,7 @@ def sheet_delete_view(request, sheet_name):
 
     template_name = 'deletion/sheet_delete.html'
 
-    sheet = Sheet.objects.get(name=sheet_name)
+    sheet = Sheet.objects.get(name=sheet_name, user=request.user)
     number_of_records = len(Record.objects.filter(sheet=sheet))
 
     context = {'sheet': sheet, 'number_of_records': number_of_records}
@@ -201,7 +201,7 @@ def record_new_view(request, sheet_name):
                             tag.save()
                         answer_tag.tag.add(tag)
 
-                messages.success(request, "Новая запись добавлена".format(sheet.name))
+            messages.success(request, "Новая запись добавлена".format(sheet.name))
 
         else:
 
