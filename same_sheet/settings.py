@@ -26,7 +26,7 @@ SECRET_KEY = 'uox2(*r4-v09isf)jgw+1$05$*$=-mz_3zy^s(8h^5k8eu-wzn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
