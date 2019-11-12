@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'uox2(*r4-v09isf)jgw+1$05$*$=-mz_3zy^s(8h^5k8eu-wzn'
+SECRET_KEY = os.environ.get('DJANGO_SAME_SHEET_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -118,9 +118,9 @@ WSGI_APPLICATION = 'same_sheet.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'same_sheet',
-        'USER': 'django_same_sheet',
-        'PASSWORD': 'samesheet',
+        'NAME': os.environ.get('DJANGO_SAME_SHEET_DB_NAME'),
+        'USER': os.environ.get('DJANGO_SAME_SHEET_DB_USER'),
+        'PASSWORD': os.environ.get('DJANGO_SAME_SHEET_DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '',
     }
