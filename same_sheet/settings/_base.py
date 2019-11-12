@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': os.environ.get('DJANGO_SAME_SHEET_DB_NAME'),
         'USER': os.environ.get('DJANGO_SAME_SHEET_DB_USER'),
         'PASSWORD': os.environ.get('DJANGO_SAME_SHEET_DB_PASSWORD'),
-        'HOST': 'localhost',
+        'HOST': os.environ.get('DJANGO_SAME_SHEET_DB_HOST'),
         'PORT': '',
     }
 }
