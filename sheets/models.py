@@ -6,34 +6,19 @@ from django.core.validators import MaxValueValidator
 
 class Sheet(models.Model):
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
-
-    name = models.CharField(
-        max_length=50,
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
 
     class Meta:
         unique_together = ('user', 'name')
 
-    def __str__(self):
-        return self.name[:50]
+    def __str__(self): return self.name[:50]
 
 
 class Question(models.Model):
 
-    sheet = models.ForeignKey(
-        'Sheet',
-        on_delete=models.CASCADE,
-    )
-
-    name = models.CharField(
-        max_length=150,
-        null=False,
-        blank=False,
-    )
+    sheet = models.ForeignKey('Sheet', on_delete=models.CASCADE)
+    name = models.CharField(max_length=150, null=False, blank=False)
 
     TEXT = 'STR'
     NUMBER = 'INT'
@@ -43,12 +28,7 @@ class Question(models.Model):
         (NUMBER, 'Number'),
         (TAG, 'Tag'),
     ]
-
-    type = models.CharField(
-        max_length=3,
-        choices=AVAILABLE_TYPES,
-        default=TEXT,
-    )
+    type = models.CharField(max_length=3, choices=AVAILABLE_TYPES, default=TEXT)
 
     max_value = models.SmallIntegerField(
         blank=True,
@@ -56,45 +36,25 @@ class Question(models.Model):
         default=0
     )
 
-    def __str__(self):
-        return self.name[:50]
+    def __str__(self): return self.name[:50]
 
 
 class Record(models.Model):
 
-    sheet = models.ForeignKey(
-        'Sheet',
-        on_delete=models.CASCADE,
-    )
-
-    date = models.DateTimeField(
-        default=timezone.now,
-    )
+    sheet = models.ForeignKey('Sheet', on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now)
 
 
 class Answer(models.Model):
 
-    question = models.ForeignKey(
-        'Question',
-        on_delete=models.CASCADE,
-    )
-
-    record = models.ForeignKey(
-        'Record',
-        on_delete=models.CASCADE,
-    )
+    question = models.ForeignKey('Question', on_delete=models.CASCADE)
+    record = models.ForeignKey('Record', on_delete=models.CASCADE)
 
 
 class AnswerInt(models.Model):
 
-    answer = models.ForeignKey(
-        'Answer',
-        on_delete=models.CASCADE,
-    )
-
-    value = models.IntegerField(
-        blank=True,
-    )
+    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
+    value = models.IntegerField(blank=True)
 
     def __str__(self):
         return str(self.value)
@@ -102,15 +62,9 @@ class AnswerInt(models.Model):
 
 class AnswerStr(models.Model):
 
-    answer = models.ForeignKey(
-        'Answer',
-        on_delete=models.CASCADE,
-    )
+    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
 
-    value = models.CharField(
-        blank=True,
-        max_length=1000,
-    )
+    value = models.CharField(blank=True, max_length=1000)
 
     def __str__(self):
         return self.value[:50]
@@ -118,9 +72,7 @@ class AnswerStr(models.Model):
 
 class Tag(models.Model):
 
-    name = models.CharField(
-        max_length=1000,
-    )
+    name = models.CharField(max_length=1000)
 
     def __str__(self):
         return self.name
@@ -128,9 +80,5 @@ class Tag(models.Model):
 
 class AnswerTag(models.Model):
 
-    answer = models.ForeignKey(
-        'Answer',
-        on_delete=models.CASCADE,
-    )
-
+    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag)
