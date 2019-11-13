@@ -9,12 +9,12 @@ from .models import (
 
 
 class NewSheetNameForm(forms.Form):
-    name = forms.CharField(label='Выберите имя для вашей ШИТ')
+    name = forms.CharField(label='Выберите имя для вашей таблицы')
 
 
 class NewSheetQuestionForm(forms.Form):
     name = forms.CharField(
-        label='Question:',
+        label='Вопрос:',
         required=False,
     )
 
@@ -25,14 +25,14 @@ class NewSheetQuestionForm(forms.Form):
     ]
 
     type = forms.ChoiceField(
-        label='Type:',
+        label='Тип:',
         choices=TYPE_CHOICES,
         initial='STR',
         required=False,
     )
 
     max_value = forms.IntegerField(
-        label='Max value',
+        label='Макс',
         required=False,
     )
 
@@ -42,7 +42,7 @@ NewSheetQuestionFormset = formset_factory(NewSheetQuestionForm, extra=5)
 
 class NewRecordDateForm(forms.Form):
     date = forms.DateField(
-        label='Date:',
+        label='Дата:',
         required=True,
         initial=timezone.now()
     )
