@@ -1,46 +1,33 @@
 from django.contrib import admin
 from .models import (
-    Sheet,
-    Question,
     Record,
+    CardType,
+    Card,
+    Question,
     Answer,
-    AnswerInt,
-    AnswerStr,
-    AnswerTag,
-    Tag,
 )
 
 
-class SheetAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name')
-
-
-admin.site.register(Sheet, SheetAdmin)
-
-
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'max_value', 'sheet')
-
-
-admin.site.register(Question, QuestionAdmin)
-
-
+@admin.register(Record)
 class RecordAdmin(admin.ModelAdmin):
-    list_display = ('sheet', 'date')
+    list_display = ('date', 'content'[:10], 'score')
 
 
-admin.site.register(Record, RecordAdmin)
+@admin.register(CardType)
+class CardTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'color', 'is_archived')
 
 
+@admin.register(Card)
+class CardAdmin(admin.ModelAdmin):
+    list_display = ('name', 'color', 'is_archived')
+
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('card', 'name', 'type')
+
+
+@admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ('question', 'record')
-
-
-admin.site.register(Answer, AnswerAdmin)
-
-admin.site.register([
-    AnswerInt,
-    AnswerStr,
-    AnswerTag,
-    Tag
-])
