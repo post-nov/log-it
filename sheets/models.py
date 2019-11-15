@@ -1,65 +1,81 @@
 from django.conf import settings
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
-from django.core.validators import MaxValueValidator
 
 
-class Sheet(models.Model):
+class CardType(models.Model):
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+    COLORS = {
+        'red': 'red',
+        'pink': 'pink',
+        'purple': 'purple',
+        'indigo': 'indigo',
+        'blue': 'blue',
+        'cyan': 'cyan',
+        'teal': 'teal',
+        'lime': 'lime',
+        'yellow': 'yellow',
+        'amber': 'amber',
+        'orange': 'orange',
+        'brown': 'brown',
+        'grey': 'grey',
+    }
 
-    class Meta:
-        unique_together = ('user', 'name')
-
-    def __str__(self):
-        return self.name[:50]
-
-
-class Question(models.Model):
-
-    sheet = models.ForeignKey('Sheet', on_delete=models.CASCADE)
-    name = models.CharField(max_length=150, null=False, blank=False)
-
-    TEXT = 'STR'
-    NUMBER = 'INT'
-    TAG = 'TAG'
-    AVAILABLE_TYPES = [
-        (TEXT, 'Text'),
-        (NUMBER, 'Number'),
-        (TAG, 'Tag'),
-    ]
-    type = models.CharField(max_length=3, choices=AVAILABLE_TYPES, default=TEXT)
-
-    max_value = models.SmallIntegerField(
-        blank=True,
-        # Apparently, it's mandatory to set default value for this type of fields
-        default=0
-    )
+    name = models.CharField(max_length=50, null=False, blank=False)
+    color = models.CharField(max_length=6, choices=COLORS, default='')
+    is_archived = models.BooleanField(default=False, null=False)
 
     def __str__(self):
-        return self.name[:50]
+        return self.name
+
+
+class Card(models.Model):
+
+    cardType = models.ForeignKey('CardType', on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=False, blank=False)
+    created = models.DateTimeField(default=timezone.now)
+    is_archived = models.BooleanField(default=False, null=False)
+
+    def __str__(self):
+        return self.name
 
 
 class Record(models.Model):
 
-    sheet = models.ForeignKey('Sheet', on_delete=models.CASCADE)
-    date = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    card = models.ManyToManyField(Card)
+    date = models.DateTimeField(primary_key=True, default=timezone.now)
+    content = models.TextField()
+    score = models.SmallIntegerField()
+
+    def __str__(self):
+        return ('Record: {}'.format(self.date))
+
+
+class Question(models.Model):
+
+    TYPES = [
+        ('STR', 'Text'),
+        ('INT', 'Number'),
+        ('LST', 'List'),
+        ('BOL', 'Boolean'),
+        ('TAG', 'Tag'),
+    ]
+
+    card = models.ForeignKey('Card', on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=False, blank=False)
+    type = models.CharField(max_length=3, choices=TYPES, default='STR')
+
+    def __str__(self):
+        return self.name
 
 
 class Answer(models.Model):
 
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
     record = models.ForeignKey('Record', on_delete=models.CASCADE)
-
-
-class AnswerInt(models.Model):
-
-    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
-    value = models.IntegerField(blank=True)
-
-    def __str__(self):
-        return str(self.value)
 
 
 class AnswerStr(models.Model):
@@ -71,9 +87,37 @@ class AnswerStr(models.Model):
         return self.value[:50]
 
 
+class AnswerInt(models.Model):
+
+    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
+    value = models.IntegerField(blank=True)
+
+    def __str__(self):
+        return str(self.value)
+
+
+class AnswerLst(models.Model):
+
+    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
+    value = ArrayField(models.CharField(max_length=50, blank=True))
+
+    def __str__(self):
+        return str(self.value)
+
+
+class AnswerBol(models.Model):
+
+    answer = models.ForeignKey('Answer', on_delete=models.CASCADE)
+    value = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.value)
+
+
 class Tag(models.Model):
 
     name = models.CharField(max_length=1000)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
