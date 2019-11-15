@@ -6,24 +6,8 @@ from django.utils import timezone
 
 class CardType(models.Model):
 
-    COLORS = {
-        'red': 'red',
-        'pink': 'pink',
-        'purple': 'purple',
-        'indigo': 'indigo',
-        'blue': 'blue',
-        'cyan': 'cyan',
-        'teal': 'teal',
-        'lime': 'lime',
-        'yellow': 'yellow',
-        'amber': 'amber',
-        'orange': 'orange',
-        'brown': 'brown',
-        'grey': 'grey',
-    }
-
     name = models.CharField(max_length=50, null=False, blank=False)
-    color = models.CharField(max_length=6, choices=COLORS, default='')
+    color = models.CharField(max_length=6, default='')
     is_archived = models.BooleanField(default=False, null=False)
 
     def __str__(self):
@@ -46,9 +30,18 @@ class Record(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     card = models.ManyToManyField(Card)
-    date = models.DateTimeField(primary_key=True, default=timezone.now)
+    date = models.DateField(primary_key=True)
     content = models.TextField()
-    score = models.SmallIntegerField()
+
+    AVAILABLE_SCORES = [
+        (0, '0'),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    ]
+    score = models.SmallIntegerField(default=0, choices=AVAILABLE_SCORES)
 
     def __str__(self):
         return ('Record: {}'.format(self.date))

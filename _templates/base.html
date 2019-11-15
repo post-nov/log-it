@@ -15,19 +15,9 @@
     {% block js %}
     {% endblock js %}
 
-    {# Style to make footer sticky to bottom #}
-    <style media="screen">
-        body {
-        display: flex;
-        min-height: 100vh;
-        flex-direction: column;
-        }
-        main {
-        flex: 1 0 auto;
-        }
-    </style>
+    {% block style %}
+    {% endblock %}
 
-    {% block style %}{% endblock %}
 </head>
 <body>
 
@@ -36,7 +26,7 @@
             <ul class="left">
                 <li><a href="{% url 'home' %}">Главная</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'sheets' %}"><strong>Таблицы</strong></a></li>
+                <li><a href="{% url 'overview' %}"><strong>Календарь</strong></a></li>
                 {% endif %}
                 <li><a href="#">Информация</a></li>
                 <li><a href="#">Контакты</a></li>

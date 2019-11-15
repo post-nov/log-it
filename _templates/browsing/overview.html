@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+OVERVIEW
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/browsing/overview.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+<div class="row pv-3">
+    <h4 class="col s6 offset-s3 center-align">{% now "F" %}</h4>
+    <div class="col s6 offset-s3">
+        <table class="centered stripped">
+            {% comment %}
+            <thead class="blue">
+                <td class="center-align"><div class="content">Пн</div></td>
+                <td class="center-align"><div class="content">Вт</div></td>
+                <td class="center-align"><div class="content">Ср</div></td>
+                <td class="center-align"><div class="content">Чт</div></td>
+                <td class="center-align"><div class="content">Пт</div></td>
+                <td class="center-align"><div class="content">Сб</div></td>
+                <td class="center-align"><div class="content">Вс</div></td>
+            </thead>
+            {% endcomment %}
+            <tbody>
+                {% for week in days %}
+                <tr>
+                    {% for day in week %}
+                        {% if day == 0 %}
+                            <td>
+                                <div class="content"></div>
+                            </td>
+                        {% else %}
+                            <td class="hoverable">
+                                <div class="content">
+                                    <h5>
+                                        <a href="{% url "record" year=year month=month day=day %}">{{ day }}</a>
+                                    </h5>
+                                </div>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col s2">
+        <div class="section">
+            <h5>Год</h5>
+            <a href="#"><< 2019 >></a>
+        </div>
+        <div class="section">
+            <h5>Месяц</h5>
+            <ul>
+                <li><a href="">Январь</a></li>
+                <li><a href="">Февраль</a></li>
+                <li><a href="">Март</a></li>
+                <li><a href="">Апрель</a></li>
+                <li><a href="">Май</a></li>
+                <li><a href="">Июнь</a></li>
+                <li><a href="">Июль</a></li>
+                <li><a href="">Август</a></li>
+                <li><a href="">Сентябрь</a></li>
+                <li><a href="">Октябрь</a></li>
+                <li><a href="">Ноябрь</a></li>
+                <li><a href="">Декабрь</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

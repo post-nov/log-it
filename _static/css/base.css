@@ -1,6 +1,13 @@
-:root {
-    --primary-color: #2196f3;
+/* Style to make footer sticky to bottom */
+body {
+display: flex;
+min-height: 100vh;
+flex-direction: column;
 }
+main {
+flex: 1 0 auto;
+}
+
 
 .mv-5 {
     margin: 5rem 0;
@@ -17,6 +24,24 @@
 .mv-1 {
     margin: 1rem 0;
 }
+
+.pv-5 {
+    padding: 5rem 0;
+}
+.pv-4 {
+    padding: 4rem 0;
+}
+.pv-3 {
+    padding: 3rem 0;
+}
+.pv-2 {
+    padding: 2rem 0;
+}
+.pv-1 {
+    padding: 1rem 0;
+}
+
+
 
 .overline {
     text-decoration: line-through;

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}
+Запись
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/browsing/overview.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% if record %}
+<div class="row">
+    <div class="col s8 offset-s2 mv-4">
+        <div class="card blue lighten-5">
+            <div class="card-content">
+                <span class="card-title">Запись за {{ date|date:"d-m-y" }}</span>
+                <p>Итоги дня</p>
+                <p>{{record.content}}</p>
+
+                <p>Оценка дня:{{record.score}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<form method="post">
+    {% csrf_token %}
+    <div class="input-field">
+        {% render_field form.content type="textarea" class="materialize-textarea" %}
+    </div>
+    <div class="input-field">
+        <div>
+            <label>
+                <input type="radio" name="score" value="1">
+                <i class="material-icons medium">sentiment_very_dissatisfied</i>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="score" value="2">
+                <i class="material-icons medium">sentiment_dissatisfied</i>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="score" value="3">
+                <i class="material-icons medium">sentiment_neutral</i>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="score" value="4">
+                <span><i class="material-icons medium">sentiment_satisfied</i></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="radio" name="score" value="5">
+                <i class="material-icons medium">sentiment_very_satisfied</i>
+            </label>
+        </div>
+    </div>
+
+    <button type="submit" name="button">submit</button>
+</form>
+{% endif %}
+
+{% endblock %}

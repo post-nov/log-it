@@ -30,7 +30,7 @@ def registration_view(request):
             messages.success(
                 request, 'Пользователь {} успешно создан'.format(user.username))
             login(request, user)
-            return redirect('sheets')
+            return redirect('overview')
 
         else:
             return render(
@@ -51,7 +51,7 @@ def registration_view(request):
 def logout_view(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("home")
+    return redirect("overview")
 
 
 def login_view(request):
@@ -64,7 +64,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, 'You are now logged in as {}'.format(username))
-                return redirect('sheets')
+                return redirect('overview')
             else:
                 messages.error(request, 'Invalid password or username')
         else:

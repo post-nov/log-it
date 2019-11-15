@@ -20,7 +20,7 @@ class CardTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color', 'is_archived')
+    list_display = ('name', 'is_archived')
 
 
 @admin.register(Question)
