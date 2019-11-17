@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Создать новую карточку
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+
+{% block content %}
+
+<h5>Новая группа</h5>
+<form method="post">
+    {% csrf_token %}
+    <div class="input-field">
+        {{ form.name }}
+        <label>Имя нового типа</label>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% for color in colors %}
+                <label>
+                    <input class="{{ color }}" type="radio" name="color" value="{{ color }}">
+                    <span class="{{ color }}-text">{{ color }}</span>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+    <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Создать</button>
+
+</form>
+
+{% endblock %}

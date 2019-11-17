@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Создать новую карточку
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('select').formSelect();
+});
+</script>
+{% endblock %}
+
+
+{% block content %}
+
+<h5>Новая карточка</h5>
+<form method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col s12 input-field">
+            {{ form_card }}
+        </div>
+
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <div class="col s8 input-field">
+                {{ form.name }}
+                <label>Название</label>
+            </div>
+            <div class="col s4 input-field">
+                {{ form.type }}
+                <label>Тип</label>
+            </div>
+        {% endfor %}
+
+    </div>
+    <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Создать</button>
+
+</form>
+
+{% endblock %}

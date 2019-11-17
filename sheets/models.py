@@ -7,7 +7,9 @@ from django.utils import timezone
 class CardType(models.Model):
 
     name = models.CharField(max_length=50, null=False, blank=False)
-    color = models.CharField(max_length=6, default='')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    color = models.CharField(max_length=20, default='')
     is_archived = models.BooleanField(default=False, null=False)
 
     def __str__(self):
@@ -16,7 +18,7 @@ class CardType(models.Model):
 
 class Card(models.Model):
 
-    cardType = models.ForeignKey('CardType', on_delete=models.CASCADE)
+    card_type = models.ForeignKey('CardType', on_delete=models.CASCADE)
     name = models.CharField(max_length=50, null=False, blank=False)
     created = models.DateTimeField(default=timezone.now)
     is_archived = models.BooleanField(default=False, null=False)

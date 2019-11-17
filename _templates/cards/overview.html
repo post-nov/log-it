@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Карточки
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+
+{% block content %}
+
+{% if card_groups %}
+    {% for card_group in card_groups %}
+        <h4>{{ card_group.type.name }}</h4>
+        {% if card_group.cards %}
+            {% for card in card_group.cards %}
+                <p>{{ card }}</p>
+            {% endfor %}
+            <a href="{% url 'new_card' card_group.type.name %}">Добавить</a>
+        {% else %}
+            <p>У вас нет ни одной карточки в этой группе.</p>
+            <a href="{% url 'new_card' card_group.type.name %}">Добавить</a>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <div>
+        <h5>У вас нет ни одной группы карточек.</h5>
+    </div>
+{% endif %}
+
+<div class="row">
+    <div class="col s12">
+        <a href="{% url 'new_card_type' %}">Создать новый тип</a>
+    </div>
+</div>
+
+{% endblock %}
