@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 {% load static %}
+{% load sheets_tags %}
 
 {% block title %}
 Запись
@@ -10,63 +11,138 @@
 <link rel="stylesheet" href="{% static 'css/browsing/overview.css' %}">
 {% endblock %}
 
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('select').formSelect();
+});
+</script>
+{% endblock %}
+
 {% block content %}
 
-{% if record %}
-<div class="row">
-    <div class="col s8 offset-s2 mv-4">
-        <div class="card blue lighten-5">
-            <div class="card-content">
-                <span class="card-title">Запись за {{ date|date:"d-m-y" }}</span>
-                <p>Итоги дня</p>
-                <p>{{record.content}}</p>
 
-                <p>Оценка дня:{{record.score}}</p>
+{% if record %}
+
+    <div class="row">
+        <div class="col s8 offset-s2 mv-4">
+            <div class="card blue lighten-5">
+                <div class="card-content">
+                    <span class="card-title">Запись за {{ record.date|date:"d-m-y" }}</span>
+                    <p>Итоги дня</p>
+                    <p>{{record.content}}</p>
+
+                    <p>Оценка дня:{{record.score}}</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% else %}
-<form method="post">
-    {% csrf_token %}
-    <div class="input-field">
-        {% render_field form.content type="textarea" class="materialize-textarea" %}
-    </div>
-    <div class="input-field">
-        <div>
-            <label>
-                <input type="radio" name="score" value="1">
-                <span><i class="material-icons medium">sentiment_very_dissatisfied</i></span>
-            </label>
-        </div>
-        <div>
-            <label>
-                <input type="radio" name="score" value="2">
-                <span><i class="material-icons medium">sentiment_dissatisfied</i></span>
-            </label>
-        </div>
-        <div>
-            <label>
-                <input type="radio" name="score" value="3">
-                <span><i class="material-icons medium">sentiment_neutral</i></span>
-            </label>
-        </div>
-        <div>
-            <label>
-                <input type="radio" name="score" value="4">
-                <span><i class="material-icons medium">sentiment_satisfied</i></span>
-            </label>
-        </div>
-        <div>
-            <label>
-                <input type="radio" name="score" value="5">
-                <span><i class="material-icons medium">sentiment_very_satisfied</i></span>
-            </label>
-        </div>
-    </div>
 
-    <button type="submit" name="button">submit</button>
-</form>
+    {% if record_cards %}
+        <div class="row">
+            {% for card in record_cards %}
+                <div class="col s12 m6 l4">
+                    <div class="card {{ card|get_item:"card_color" }} black-text">
+                        <div class="row card-content">
+                            <span class="card-title">{{ card|get_item:"card_name" }}</span>
+
+                            {% include "includes/cards/card_snippet.html" with questions_answers=card|get_item:"card_qa" with_control='YES' card_name=card|get_item:"card_name" card_type_name=card|get_item:"card_type_name" date=date %}
+
+                            {% comment %}
+                            {% for qa in card|get_item:"card_qa" %}
+                                <h6>{{ qa.0.name }}</h6>
+                                <div class="col s12">
+                                {% if qa.0.type == "LST" %}
+                                    {% for element in qa.1.lst_answers %}
+                                    <p>{{ element }}</p>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>{{ qa.1 }}</p>
+                                {% endif %}
+                                </div>
+                            {% endfor %}
+                            {% endcomment %}
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if card_groups %}
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                <div class="col s6 offset-s2">
+                    <select name="card">
+                        {% for card_type, cards in card_groups.items %}
+                        <optgroup label="{{ card_type }}">
+                            {% for card in cards %}
+                            {% comment %}
+                            Пришлось использовать специальные знаки, чтобы одновременно передать информацию о карточке и ее типе. Могу предположить, что использование скрытого поля в связке с js может решить проблему, но пока я не знаю как именно это реализовать.
+                            {% endcomment %}
+                            <option value="{{ card_type }}---|||---{{ card.name }}">{{ card.name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col s2 right-align">
+                    <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Добавить</button>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col s12">
+                <p class="center-align">Почему бы вам не <a href="{% url 'cards' %}">создать</a> пару карточек?</p>
+            </div>
+        </div>
+    {% endif %}
+
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-field">
+            {% render_field form.content type="textarea" class="materialize-textarea" %}
+        </div>
+
+        <div class="input-field">
+            <div>
+                <label>
+                    <input type="radio" name="score" value="1">
+                    <span><i class="material-icons medium">sentiment_very_dissatisfied</i></span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="score" value="2">
+                    <span><i class="material-icons medium">sentiment_dissatisfied</i></span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="score" value="3">
+                    <span><i class="material-icons medium">sentiment_neutral</i></span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="score" value="4">
+                    <span><i class="material-icons medium">sentiment_satisfied</i></span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="score" value="5">
+                    <span><i class="material-icons medium">sentiment_very_satisfied</i></span>
+                </label>
+            </div>
+        </div>
+
+        <button type="submit" name="button">submit</button>
+    </form>
 {% endif %}
 
 {% endblock %}

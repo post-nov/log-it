@@ -1,0 +1,18 @@
+{% for qa in questions_answers %}
+    <h6>{{ qa.0.name }}</h6>
+    <div class="col s12 lighten-2">
+        {% if qa.0.type == "LST" %}
+            {% for element in qa.1.lst_answers %}
+            <p>{{ element }}</p>
+            {% endfor %}
+        {% else %}
+            <p>{{ qa.1 }}</p>
+        {% endif %}
+    </div>
+{% endfor %}
+{% if with_control == 'YES' %}
+    <div class="col s12">
+        <a href="{% url 'record_card_delete' record.date.year record.date.month record.date.day card_type_name card_name %}">Удалить</a>
+        {# <p>{{record.date.year}}{{record.date.month}}{{record.date.day}}{{card_type_name}}{{card_name}}</p> #}
+    </div>
+{% endif %}

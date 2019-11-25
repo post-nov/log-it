@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}
+Запись
+{% endblock %}
+
+{% block content %}
+
+<h5>Карточка {{ card }}</h5>
+
+<form method="post">
+    {% csrf_token %}
+    {% for question, form in questions_forms %}
+        {% if question.type == 'BOL' %}
+            <p>
+                <span>{{ question.name }}</span>
+                <label>
+                    <input type="radio" name="value" value="1" required="">
+                    <span>Да</span>
+                </label>
+                <label>
+                    <input type="radio" name="value" value="0" required="">
+                    <span>Нет</span>
+                </label>
+            </p>
+        {% elif question.type == 'LST' %}
+            <div class="input-field">
+                {% render_field form.value class+="materialize-textarea" %}
+                <label>{{ question.name }}</label>
+                {% if form.non_field_errors %}
+                    <span class="helper-text red-text">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </span>
+                {% elif form.value.errors %}
+                    <span class="helper-text red-text">
+                        {% for error in form.value.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </span>
+                {% else %}
+                    <span class="helper-text" data-error="WRONG DUDE">
+                        {{ question.type }} {{ form.value.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="input-field">
+                {{ form.value }}
+                <label>{{ question.name }}</label>
+                {% if form.non_field_errors %}
+                    <span class="helper-text red-text">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </span>
+                {% elif form.value.errors %}
+                    <span class="helper-text red-text">
+                        {% for error in form.value.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </span>
+                {% else %}
+                    <span class="helper-text" data-error="WRONG DUDE">
+                        {{ question.type }} {{ form.value.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Добавить</button>
+</form>
+
+{% endblock %}

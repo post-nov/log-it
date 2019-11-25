@@ -1,4 +1,6 @@
 from ._base import *
+import logging
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -13,6 +15,25 @@ MIDDLEWARE += (
 INSTALLED_APPS += (
     'debug_toolbar',
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'log.log'),
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
 
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',

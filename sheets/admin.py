@@ -5,6 +5,11 @@ from .models import (
     Card,
     Question,
     Answer,
+    AnswerStr,
+    AnswerInt,
+    AnswerLst,
+    AnswerBol,
+    AnswerTag,
 )
 
 
@@ -31,3 +36,28 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ('question', 'record')
+
+
+@admin.register(AnswerStr)
+class AnswerStrAdmin(admin.ModelAdmin):
+    list_display = ('answer', 'value')
+
+
+@admin.register(AnswerInt)
+class AnswerIntAdmin(admin.ModelAdmin):
+    list_display = ('answer', 'value')
+
+
+@admin.register(AnswerLst)
+class AnswerLstAdmin(admin.ModelAdmin):
+    list_display = ('answer', 'value')
+
+
+@admin.register(AnswerBol)
+class AnswerBolAdmin(admin.ModelAdmin):
+    list_display = ('answer', 'value')
+
+
+# @admin.register(AnswerTag)
+# class AnswerTagAdmin(admin.ModelAdmin):
+#     list_display = ('answer', 'tag')
