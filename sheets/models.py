@@ -89,9 +89,9 @@ class Answer(models.Model):
             return ', '.join(tags)
         elif self.question.type == 'BOL':
             if AnswerBol.objects.get(answer=self).value:
-                return str(1)
+                return 'Да'
             else:
-                return str(0)
+                return 'Нет'
         else:
             return 'NOTHING'
 

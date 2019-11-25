@@ -1,18 +1,33 @@
+{% comment %}
+    Отдаю себе полный отчет в том, что здесь происходит полный п%@$ец,
+    но вникать пока в него не собираюсь.
+{% endcomment %}
 {% for qa in questions_answers %}
-    <h6>{{ qa.0.name }}</h6>
-    <div class="col s12 lighten-2">
+    <div class="element row z-depth-1">
+        <h5 class="col s12 m4">{{ qa.0.name }}</h5>
         {% if qa.0.type == "LST" %}
+            <div class="col s12 m8">
             {% for element in qa.1.lst_answers %}
-            <p>{{ element }}</p>
+            <p>{{ forloop.counter }}. {{ element }}</p>
             {% endfor %}
+            </div>
+        {% elif qa.0.type == "BOL" %}
+            <span class="col s12 m8">
+                {{qa.1}} {# Хотелось бы иконок, но почему-то не могу получить доступ к ответу #}
+            {% if qa.1 == 'Да' %}
+                <i class="small material-icons">done</i>
+            {% elif qa.1 == 'Нет' %}
+                <i class="small material-icons">not_interested</i>
+            {% endif %}
+            </span>
         {% else %}
-            <p>{{ qa.1 }}</p>
+            <p class="col s12 m8">{{ qa.1 }}</p>
         {% endif %}
     </div>
 {% endfor %}
 {% if with_control == 'YES' %}
-    <div class="col s12">
-        <a href="{% url 'record_card_delete' record.date.year record.date.month record.date.day card_type_name card_name %}">Удалить</a>
+    <div class="right-align ">
+        <a class="right-align black-text" href="{% url 'record_card_delete' record.date.year record.date.month record.date.day card_type_name card_name %}">Удалить</a>
         {# <p>{{record.date.year}}{{record.date.month}}{{record.date.day}}{{card_type_name}}{{card_name}}</p> #}
     </div>
 {% endif %}

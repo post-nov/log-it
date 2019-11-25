@@ -1,0 +1,33 @@
+[type="radio"]:checked + span::after,
+[type="radio"].with-gap:checked + span::after {
+    background-color: #2196f3;
+}
+
+[type="radio"]:not(:checked) + span::before,
+[type="radio"]:not(:checked) + span::after,
+[type="radio"]:checked + span::before,
+[type="radio"]:checked + span::after,
+[type="radio"].with-gap:checked + span::before,
+[type="radio"].with-gap:checked + span::after
+{
+    border: 2px solid #1e88e5;
+}
+
+.element {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    /* border: solid 1px lightgrey; */
+    border-radius: 5px;
+}
+
+.element h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    /* text-align: center; */
+}
+
+.element p {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+
+}

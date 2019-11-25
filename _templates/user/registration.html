@@ -1,82 +1,32 @@
-{% extends "base.html" %}
-{% load static %}
-
+{% extends "base_form.html" %}
 {% block title %}
 REGISTRATION
 {% endblock %}
 
-{% block style %}
-    <link rel="stylesheet" href="{% static "css/user/registrations.css" %}">
-{% endblock %}
-
-{% block content %}
-<div class="row">
-    <div class="col s6 offset-s3 z-depth-2 mv-3">
-        <h4 class="mv-2 center-align">Регистрация</h4>
-        <form method="POST">
-            {% csrf_token %}
-
-            {% comment %}
-            <div class="input-field">
-                {{ form.username }}
-                <label>Имя пользователя</label>
-                {% if form.username.errors %}
-                    <span class="helper-text red-text">
-                        {% for error in fform.username.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </span>
-                {% endif %}
-            </div>
-            <div class="input-field">
-                {{ form.password2 }}
-                <label>ППароль</label>
-                {% if form.password2.errors %}
-                    <span class="helper-text red-text">
-                        {% for error in form.password2.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </span>
-                {% endif %}
-            </div>
-            <div class="input-field">
-                {{ form.password1 }}
-                <label>Подтверждение пароля</label>
-                {% if form.password1.errors %}
-                <span class="helper-text red-text">
-                    {% for error in form.password1.errors %}
-                    {{ error }}
-                    {% endfor %}
-                </span>
-                {% endif %}
-            </div>
-            <div class="center-align">
-                <button class="waves-effect waves-light blue btn center-align mv-1" type="Submit" name="button">Зарегистрироваться</button>
-            </div>
-            {% endcomment %}
-
-            {% for field in form.visible_fields %}
-                <div class="input-field">
-                    {{ field }}
-                    <label>{{ field.label }}</label>
-                    {% if field.errors %}
-                    <span class="helper-text red-text">
-                        {% for error in field.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </span>
-                    {% endif %}
-                </div>
-            {% endfor %}
-
-            <div class="center-align">
-                <button class="waves-effect waves-light blue btn center-align mv-1" type="Submit" name="button">Зарегистрироваться</button>
-            </div>
-        </form>
-
-        <div class="mv-1 center-align">
-            Уже есть аккаунт? <a href="{% url 'login' %}"><strong>Вход</strong> здесь</a>
+{% block form %}
+<h4 class="mv-2 center-align">Регистрация</h4>
+<form method="POST">
+    {% csrf_token %}
+    {% for field in form.visible_fields %}
+        <div class="input-field">
+            {{ field }}
+            <label>{{ field.label }}</label>
+            {% if field.errors %}
+            <span class="helper-text red-text">
+                {% for error in field.errors %}
+                {{ error }}
+                {% endfor %}
+            </span>
+            {% endif %}
         </div>
+    {% endfor %}
+
+    <div class="center-align">
+        <button class="waves-effect waves-light blue btn center-align mv-1" type="Submit" name="button">Зарегистрироваться</button>
     </div>
+</form>
+
+<div class="mv-1 center-align">
+    Уже есть аккаунт? <a href="{% url 'login' %}"><strong>Вход</strong> здесь</a>
 </div>
-    {% endblock %}
+{% endblock %}

@@ -8,31 +8,47 @@
 {% endblock %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/browsing/overview.css' %}">
+<link rel="stylesheet" href="{% static 'css/browsing/record.css' %}">
 {% endblock %}
 
 {% block js %}
 <script>
-$(document).ready(function() {
-    $('select').formSelect();
-});
+{% include "includes/materialize/select_init.html" %}
 </script>
 {% endblock %}
+
 
 {% block content %}
 
 
-{% if record %}
+{% if record %} {# Запись за этот день имеентся #}
+
 
     <div class="row">
         <div class="col s8 offset-s2 mv-4">
-            <div class="card blue lighten-5">
+            <div class="card grey lighten-4">
                 <div class="card-content">
-                    <span class="card-title">Запись за {{ record.date|date:"d-m-y" }}</span>
-                    <p>Итоги дня</p>
-                    <p>{{record.content}}</p>
+                    <span class="card-title center-align">{{ record.date|date:"d-m-y" }}</span>
 
-                    <p>Оценка дня:{{record.score}}</p>
+                    <div class="element z-depth-1 row mv-2">
+                        <h5 class="col s12 m4">Итоги дня</h5>
+                        <p class="col s12 m8">{{record.content}}</p>
+                    </div>
+
+                    <div class="center-align">
+                    {% if record.score == 1 %}
+                        <i class="material-icons medium blue-text text-darken-4">sentiment_very_dissatisfied</i>
+                    {% elif record.score == 2 %}
+                        <i class="material-icons medium blue-text text-darken-2">sentiment_dissatisfied</i>
+                    {% elif record.score == 3 %}
+                        <i class="material-icons medium blue-text">sentiment_neutral</i>
+                    {% elif record.score == 4 %}
+                        <i class="material-icons medium blue-text text-lighten-2">sentiment_satisfied</i>
+                    {% elif record.score == 5 %}
+                        <i class="material-icons medium blue-text text-lighten-4">sentiment_very_satisfied</i>
+                    {% endif %}
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -42,26 +58,11 @@ $(document).ready(function() {
         <div class="row">
             {% for card in record_cards %}
                 <div class="col s12 m6 l4">
-                    <div class="card {{ card|get_item:"card_color" }} black-text">
-                        <div class="row card-content">
-                            <span class="card-title">{{ card|get_item:"card_name" }}</span>
+                    <div class="card {{ card|get_item:"card_color" }} black-text z-depth-2">
+                        <div class="card-content">
+                            <span class="center-align card-title">{{ card|get_item:"card_name" }}</span>
 
                             {% include "includes/cards/card_snippet.html" with questions_answers=card|get_item:"card_qa" with_control='YES' card_name=card|get_item:"card_name" card_type_name=card|get_item:"card_type_name" date=date %}
-
-                            {% comment %}
-                            {% for qa in card|get_item:"card_qa" %}
-                                <h6>{{ qa.0.name }}</h6>
-                                <div class="col s12">
-                                {% if qa.0.type == "LST" %}
-                                    {% for element in qa.1.lst_answers %}
-                                    <p>{{ element }}</p>
-                                    {% endfor %}
-                                {% else %}
-                                    <p>{{ qa.1 }}</p>
-                                {% endif %}
-                                </div>
-                            {% endfor %}
-                            {% endcomment %}
 
                         </div>
                     </div>
@@ -101,48 +102,46 @@ $(document).ready(function() {
         </div>
     {% endif %}
 
-{% else %}
-    <form method="post">
-        {% csrf_token %}
-        <div class="input-field">
-            {% render_field form.content type="textarea" class="materialize-textarea" %}
-        </div>
+{% else %} {# Запись за этот день нет #}
+    <div class="row">
+        <div class="col s6 offset-s3 z-depth-2 mv-3">
+            <h5 class="center-align">Итоги {{ date|date:"d-m-y" }}</h5>
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field">
+                    {% render_field form.content type="textarea" class="materialize-textarea" %}
+                </div>
 
-        <div class="input-field">
-            <div>
-                <label>
-                    <input type="radio" name="score" value="1">
-                    <span><i class="material-icons medium">sentiment_very_dissatisfied</i></span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="score" value="2">
-                    <span><i class="material-icons medium">sentiment_dissatisfied</i></span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="score" value="3">
-                    <span><i class="material-icons medium">sentiment_neutral</i></span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="score" value="4">
-                    <span><i class="material-icons medium">sentiment_satisfied</i></span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="score" value="5">
-                    <span><i class="material-icons medium">sentiment_very_satisfied</i></span>
-                </label>
-            </div>
-        </div>
+                <p class="center-align">
+                    <label for"score1">
+                        <input id="score1" class="score-1" type="radio" name="score" value="1">
+                        <span>1</span>
+                    </label>
 
-        <button type="submit" name="button">submit</button>
-    </form>
+                    <label>
+                        <input class="score-2" type="radio" name="score" value="2">
+                        <span>2</span>
+                    </label>
+                    <label>
+                        <input class="score-3" type="radio" name="score" value="3">
+                        <span>3</span>
+                    </label>
+                    <label>
+                        <input class="score-4" type="radio" name="score" value="4">
+                        <span>4</span>
+                    </label>
+                    <label>
+                        <input class="score-5" type="radio" name="score" value="5">
+                        <span>5</span>
+                    </label>
+                </p>
+
+                <div class="center-align">
+                    <button class="waves-effect waves-light blue btn center-align mv-1" type="Submit" name="button">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endif %}
 
-{% endblock %}
+{% endblock content %}
