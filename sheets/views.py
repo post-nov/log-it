@@ -41,7 +41,13 @@ def overview(request):
     today = timezone.localdate()
     raw_days = list(calen.itermonthdays(today.year, today.month))
 
-    records = Record.objects.filter(date__year=today.year, date__month=today.month)
+    records = Record.objects.filter(date__year=today.year,
+                                    date__month=today.month,
+                                    user=request.user)
+    try:
+        record = Record.objects.get(date=today, user=request.user)
+    except:
+        record = None
 
     def create_filled_calendar(days, records):
         days_by_weeks = [raw_days[i:i+7] for i in range(0, len(raw_days), 7)]
@@ -66,8 +72,8 @@ def overview(request):
     template_name = 'browsing/overview.html'
     context = {
         'days': create_filled_calendar(raw_days, records),
-        'month': today.month,
-        'year': today.year,
+        'record': record,
+        'today': today,
     }
     return render(request, template_name, context)
 

@@ -9,3 +9,7 @@ td{
 .cal-cell {
     margin: 0.5rem;
 }
+
+.border {
+    border: solid 4px #01579b;
+}

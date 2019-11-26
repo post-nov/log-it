@@ -45,12 +45,18 @@ OVERVIEW
     <div class="col s12 l4">
         <div class="card">
             <div class="card-content">
-                <span class="card-title">Сегодня 25-11-19</span>
+                <span class="card-title">Сегодня {{ today|date:'d.m.y'}}</span>
+                {% if record %}
+                <p>{{ record.content|linebreaks }}</p>
+                {% else %}
                 <p>Записи еще не сделано</p>
+                {% endif %}
             </div>
+            {% if not record %}
             <div class="card-action">
                 <a class="green-text" href="#">Добавить</a>
             </div>
+            {% endif %}
         </div>
     </div>
 
@@ -60,7 +66,7 @@ OVERVIEW
             <div class="card-content">
                 <h5 class="center-align">Ноябрь</h5>
 
-                <table class="mv-2">
+                <table class="mv-2 centered">
                     <tr>
                         {# Для прорисовки линии сверху таблицы #}
                     </tr>
@@ -72,32 +78,7 @@ OVERVIEW
                                     <div class=""></div>
                                 </td>
                         {% else %}
-                        {% comment %}
-                        <td class="hoverable">
-                            <div>
-                                {% if day.score %}
-                                    <h5 class="center-align">
-                                    {% if day.score == 1 %}
-                                        <a class="red-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
-                                    {% elif day.score == 2 %}
-                                        <a class="deep-orange-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
-                                    {% elif day.score == 3 %}
-                                        <a class="yellow-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
-                                    {% elif day.score == 4 %}
-                                        <a class="light-green-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
-                                    {% elif day.score == 5 %}
-                                        <a class="green-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
-                                    {% endif %}
-                                </h5>
-                                {% else %}
-                                <h5 class="center-align">
-                                    <a class="grey-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
-                                </h5>
-                                {% endif %}
-                            </div>
-                        </td>
-                            {% endif %}
-                        {% endcomment %}
+
                         {% if day.score %}
                             {% if day.score == 1 %}
                                 <td class=" blue darken-4">
@@ -111,16 +92,24 @@ OVERVIEW
                                 <td class=" blue lighten-4">
                             {% endif %}
                         {% else %}
-                            <td class="">
+
+                        {# Сегодняшнее число больше остальных #}
+                        {% if day.num == today.day %}
+                        <td class="border">
+                        {% else %}
+                        <td class="">
+                        {% endif %}
+
                         {% endif %}
                             <div class="cal-cell">
-                                <h5 class="center-align">
+                                <h5>
                                     {% if day.score %}
-                                        <a class="black-text tooltipped" href="{% url "record" year month day.num %}" data-position="top" data-tooltip="{% if day.cards %}{{day.cards}}{% else %}Нет карточек{% endif %}">{{ day.num }}</a>
+                                        <a class="black-text tooltipped" href="{% url "record" today.year today.month day.num %}" data-position="top" data-tooltip="{% if day.cards %}{{day.cards}}{% else %}Нет карточек{% endif %}">{{ day.num }}</a>
                                     {% else %}
-                                        <a class="grey-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
+                                        <a class="grey-text" href="{% url "record" today.year today.month day.num %}">{{ day.num }}</a>
                                     {% endif %}
                                 </h5>
+
                             </div>
                             </td>
                         {% endif %}
@@ -138,60 +127,7 @@ OVERVIEW
 </div>
 
 {% if user.is_authenticated %}
-{% comment %}
-<div class="row pv-3">
-    <h4 class="col s6 offset-s3 center-align">{% now "F" %}</h4>
-    <div class="col s6 offset-s3">
-        <table class="centered stripped">
-            <tbody>
-                {% for week in days %}
-                <tr>
-                    {% for day in week %}
-                        {% if day == 0 %}
-                            <td>
-                                <div class="content"></div>
-                            </td>
-                        {% else %}
-                            <td class="hoverable">
-                                <div class="content">
-                                    <h5>
-                                        <a href="{% url "record" year=year month=month day=day %}">{{ day }}</a>
-                                    </h5>
-                                </div>
-                            </td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="col s2">
-        <div class="section">
-            <h5>Год</h5>
-            <a href="#"><< 2019 >></a>
-        </div>
-        <div class="section">
-            <h5>Месяц</h5>
-            <ul>
-                <li><a href="">Январь</a></li>
-                <li><a href="">Февраль</a></li>
-                <li><a href="">Март</a></li>
-                <li><a href="">Апрель</a></li>
-                <li><a href="">Май</a></li>
-                <li><a href="">Июнь</a></li>
-                <li><a href="">Июль</a></li>
-                <li><a href="">Август</a></li>
-                <li><a href="">Сентябрь</a></li>
-                <li><a href="">Октябрь</a></li>
-                <li><a href="">Ноябрь</a></li>
-                <li><a href="">Декабрь</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
 
-{% endcomment %}
 {% else %}
 <div>
     <h4 class="center-align">Same sheet</h4>
