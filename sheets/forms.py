@@ -32,11 +32,11 @@ class NewCardForm(forms.ModelForm):
 class NewCardQuestionForm(forms.Form):
     name = forms.CharField(label='Поле', required=False)
 
-    TYPE_CHOICES = [('STR', 'Text'),
-                    ('INT', 'Number'),
-                    ('LST', 'List'),
-                    ('BOL', 'Boolean'),
-                    ('TAG', 'Tag')]
+    TYPE_CHOICES = [('STR', 'Текст'),
+                    ('INT', 'Число'),
+                    ('LST', 'Лист'),
+                    ('BOL', 'Булевое'),
+                    ('TAG', 'Тэг')]
 
     type = forms.ChoiceField(label='Тип',
                              choices=TYPE_CHOICES,

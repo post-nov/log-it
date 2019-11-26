@@ -312,10 +312,9 @@ def cards_view(request):
 def new_card_type_view(request):
 
     template_name = 'cards/new_card_type.html'
-    AVAILABLE_COLORS = ['red', 'pink', 'purple', 'deep-purple', 'indigo',
-                        'blue', 'light-blue', 'cyan', 'teal', 'green',
-                        'light-green', 'lime', 'yellow', 'amber', 'orange',
-                        'deep-orange', 'brown', 'grey', 'blue-grey']
+    AVAILABLE_COLORS = ['red', 'blue', 'light-blue', 'cyan',
+                        'teal', 'green', 'light-green', 'lime', 'yellow',
+                        'amber', 'orange', 'deep-orange', 'brown', 'grey', 'blue-grey']
     if request.method == 'POST':
         form = NewCardTypeForm(request.POST)
         if form.is_valid():

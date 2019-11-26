@@ -1,52 +1,40 @@
-{% extends "base.html" %}
+{% extends "base_form.html" %}
 {% load static %}
 
 {% block title %}
-Создать новую карточку
+СОЗДАТЬ НОВУЮ КАРТОЧКУ
 {% endblock %}
 
-{% block style %}
-{% endblock %}
+{% block form %}
 
-
-{% block content %}
-
-<h5>Новая группа</h5>
+<div class="mv-2 center-align">
+    <h5>Создать новую группу карточек</h5>
+</div>
 <form method="post">
     {% csrf_token %}
+
     <div class="input-field">
         {{ form.name }}
-        <label>Имя нового типа</label>
+        <label>Имя новой группы</label>
     </div>
+
+    <p>Выберете цвет группы:</p>
     <div class="row">
-        <div class="col">
-            {% for color in colors %}
-                <label class="{{ color }}">
-                    <input class="{{ color }}" type="radio" name="color" value="{{ color }}">
-                    <span class="white-text">{{ color }}</span>
-                </label>
-            {% endfor %}
-            <br>
-            {% for color in colors %}
-                <label class="{{ color }}">
+        {% for color in colors %}
+        <div class="col s6 m4 ">
+            <div class="card-panel {{ color }}">
+                <label>
                     <input class="{{ color }}" type="radio" name="color" value="{{ color }}">
                     <span class="black-text">{{ color }}</span>
                 </label>
-            {% endfor %}
-            <br>
-            {% for color in colors %}
-                <div class="card {{color}}">
-                    <div class="card-content">
-                        <span class="card-title black-text">{{ color }}</span>
-                        
-                    </div>
-
-                </div>
-            {% endfor %}
+            </div>
         </div>
+        {% endfor %}
     </div>
 
-    <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Создать</button>
+    <div class="mv-2 center-align">
+        <button class="waves-effect waves-light blue btn center-align" type="submit" name="action">Создать</button>
+    </div>
 
 </form>
 

@@ -72,3 +72,7 @@ flex: 1 0 auto;
 .overline {
     text-decoration: line-through;
 }
+
+.rounded {
+    border-radius: 5px;
+}
