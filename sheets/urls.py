@@ -7,6 +7,7 @@ from .views import (
     new_card_view,
     record_card_view,
     record_card_delete_view,
+    calendar_year_view,
 )
 
 urlpatterns = [
@@ -21,4 +22,6 @@ urlpatterns = [
     path('<int:year>/<int:month>/<int:day>/<str:card_type_name>/<str:card_name>/delete/',
          record_card_delete_view,
          name='record_card_delete'),
+    path('calendar/', calendar_year_view, name='calendar_year'),
+    path('calendar/<int:year>/', calendar_year_view, name='calendar_year'),
 ]

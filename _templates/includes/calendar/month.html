@@ -1,0 +1,51 @@
+<table class="centered">
+    <tr>
+        {# Для прорисовки линии сверху таблицы #}
+    </tr>
+{% for week in days %}
+    <tr>
+    {% for day in week %}
+        {% if day.num == 0 %}
+            <td>
+                <div class=""></div>
+            </td>
+        {% else %}
+
+        {% if day.score %}
+            {% if day.score == 1 %}
+                <td class="blue darken-4">
+            {% elif day.score == 2 %}
+                <td class="blue darken-2">
+            {% elif day.score == 3 %}
+                <td class="blue ">
+            {% elif day.score == 4 %}
+                <td class="blue lighten-2">
+            {% elif day.score == 5 %}
+                <td class="blue lighten-4">
+            {% endif %}
+        {% else %}
+
+            {# Сегодняшнее число больше остальных #}
+            {% if day.num == today.day %}
+            <td class="border">
+            {% else %}
+            <td class="">
+            {% endif %}
+
+        {% endif %}
+            <div class="cal-cell">
+                <h5>
+                    {% if day.score %}
+                        <a class="black-text tooltipped" href="{% url "record" year month day.num %}" data-position="top" data-tooltip="{% if day.cards %}{{day.cards}}{% else %}Нет карточек{% endif %}">{{ day.num }}</a>
+                    {% else %}
+                        <a class="grey-text" href="{% url "record" year month day.num %}">{{ day.num }}</a>
+                    {% endif %}
+                </h5>
+
+            </div>
+            </td>
+        {% endif %}
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>

@@ -67,6 +67,19 @@ flex: 1 0 auto;
     padding-right: 1rem;
 }
 
+/* MAKE CARDS IN ROWS WITH SAME HEIGHT */
+.d-flex {
+    display: flex;
+}
+
+.d-flex > .col {
+    display: flex;
+    flex-direction: column;
+}
+
+.d-flex>.col>.card {
+    flex:1;
+}
 
 
 .overline {

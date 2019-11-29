@@ -33,48 +33,83 @@ from .models import (
 )
 
 logger = logging.getLogger(__name__)
+
 calen = calendar.Calendar()
+
+
+def _fill_month_with_days(days, records):
+    " Создает многоуровневый лист "
+
+    days_by_weeks = [days[i:i+7] for i in range(0, len(days), 7)]
+    days = []
+    for week in days_by_weeks:
+        filled_week = []
+        for day in week:
+            if day in [record.date.day for record in records]:
+                record = records.get(date__day=day)
+                cards = ', '.join(
+                    [str(rec) for rec in record.card.all()]
+                ) if record.card.exists() else None
+                filled_week.append({'num': day,
+                                    'score': record.score,
+                                    'cards': cards})
+            else:
+                filled_week.append({'num': day, 'score': None, 'cards': None})
+        days.append(filled_week)
+    logger.error(days)
+    return days
 
 
 def overview(request):
 
-    today = timezone.localdate()
-    raw_days = list(calen.itermonthdays(today.year, today.month))
-
-    records = Record.objects.filter(date__year=today.year,
-                                    date__month=today.month,
-                                    user=request.user)
-    try:
-        record = Record.objects.get(date=today, user=request.user)
-    except:
-        record = None
-
-    def create_filled_calendar(days, records):
-        days_by_weeks = [raw_days[i:i+7] for i in range(0, len(raw_days), 7)]
-        days = []
-        for week in days_by_weeks:
-            filled_week = []
-            for day in week:
-                if day in [record.date.day for record in records]:
-                    record = records.get(date__day=day)
-                    cards = ', '.join(
-                        [str(rec) for rec in record.card.all()]
-                    ) if record.card.exists() else None
-                    filled_week.append({'num': day,
-                                        'score': record.score,
-                                        'cards': cards})
-                else:
-                    filled_week.append({'num': day, 'score': None, 'cards': None})
-            days.append(filled_week)
-        logger.error(days)
-        return days
-
     template_name = 'browsing/overview.html'
-    context = {
-        'days': create_filled_calendar(raw_days, records),
-        'record': record,
-        'today': today,
-    }
+
+    # Если пользователь не зарегистрирован, то показываем ему приветствие
+    if not request.user.is_authenticated:
+        return render(request, template_name)
+
+    # Пользователь зарегистрирован
+    else:
+        today = timezone.localdate()
+        raw_days = list(calen.itermonthdays(today.year, today.month))
+
+        # Собираем все записи на сегодняшний год и месяц, относящиеся к пользователю
+        records = Record.objects.filter(date__year=today.year,
+                                        date__month=today.month,
+                                        user=request.user)
+
+        # Получаем, если имеется, запись за сегодня
+        try:
+            record = Record.objects.get(date=today, user=request.user)
+        except:
+            record = None
+
+        context = {
+            'days': _fill_month_with_days(raw_days, records),
+            'record': record,
+            'today': today,
+        }
+        return render(request, template_name, context)
+
+
+def calendar_year_view(request, year=''):
+    template_name = 'browsing/calendar_year.html'
+    if not year:
+        year = timezone.localdate().year
+
+    records = {}
+
+    for month in range(1, 13):
+        records_by_month = (Record.objects.filter(date__year=year,
+                                                       date__month=month,
+                                                       user=request.user))
+        days_by_month = list(calen.itermonthdays(year, month))
+        records[month] = _fill_month_with_days(days_by_month,
+                                               records_by_month)
+
+    context = {'records': records,
+               'year': year}
+
     return render(request, template_name, context)
 
 
@@ -172,14 +207,13 @@ def record_view(request, year, month, day):
                 }
                 return render(request, template_name, context)
             else:
-                context = {
-                    'form': form,
-                    'date': date,
-                }
+                context = {'form': form,
+                           'date': date}
                 return render(request, template_name, context)
 
 
 def record_card_view(request, year, month, day, card_type_name, card_name):
+
     template_name = 'browsing/record_card.html'
     date = datetime.date(year, month, day)
     record = Record.objects.get(date=date)

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% load sheets_tags %}
+
+{% block title %}
+OVERVIEW
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/browsing/overview.css' %}">
+{% endblock %}
+
+{% block js %}
+<script>
+{% include "includes/materialize/tooltip_init.html" %}
+</script>
+{% endblock %}
+
+{% block content %}
+
+{# YEAR #}
+
+<div class="center-align mv-2">
+    <ul class="pagination">
+        <li class="waves-effect"><a href="{% url 'calendar_year' year|sub_one|sub_one  %}"><i class="material-icons">chevron_left</i></a></li>
+        <li class="waves-effect"><a href="{% url 'calendar_year' year|sub_one|sub_one  %}">{{ year|sub_one|sub_one  }}</a></li>
+        <li class="waves-effect"><a href="{% url 'calendar_year' year|sub_one %}">{{ year|sub_one }}</a></li>
+        <li class="active"><a href="{% url 'calendar_year' year %}">{{ year }}</a></li>
+        <li class="waves-effect"><a href="{% url 'calendar_year' year|add_one %}">{{ year|add_one  }}</a></li>
+        <li class="waves-effect"><a href="{% url 'calendar_year' year|add_one|add_one  %}">{{ year|add_one|add_one  }}</a></li>
+        <li class="waves-effect"><a href="{% url 'calendar_year' year|add_one|add_one  %}"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+</div>
+
+
+
+<div class="mv-2">
+    {# FIRST QUARTER #}
+    <div class="row d-flex">
+    	<div class="col s12 l4">
+    		<div class="card cyan lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Январь</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=1 days=records.1 %}
+    			</div>
+    		</div>
+    	</div>
+    
+    	<div class="col s12 l4">
+    		<div class="card cyan lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Февраль</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=2 days=records.2 %}
+    			</div>
+    		</div>
+    	</div>
+    
+    	<div class="col s12 l4">
+    		<div class="card lime lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Март</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=3 days=records.3 %}
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+    {# SECOND QUARTER #}
+    <div class="row d-flex">
+    	<div class="col s12 l4">
+    		<div class="card lime lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Апрель</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=4 days=records.4 %}
+    			</div>
+    		</div>
+    	</div>
+    
+    	<div class="col s12 l4">
+    		<div class="card lime lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Май</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=5 days=records.5 %}
+    			</div>
+    		</div>
+    	</div>
+    
+    	<div class="col s12 l4">
+    		<div class="card green lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Июнь</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=6 days=records.6 %}
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+    {# THIRD QUARTER #}
+    <div class="row d-flex">
+    	<div class="col s12 l4">
+    		<div class="card green lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Июль</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=7 days=records.7 %}
+    			</div>
+    		</div>
+    	</div>
+    
+    	<div class="col s12 l4">
+    		<div class="card green lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Август</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=8 days=records.8 %}
+    			</div>
+    		</div>
+    	</div>
+    
+    	<div class="col s12 l4">
+    		<div class="card red lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Сентябрь</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=9 days=records.9 %}
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+    {# FOURTH QUARTER #}
+    <div class="row d-flex">
+    	<div class="col s12 l4">
+    		<div class="card red lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Октябрь</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=10 days=records.10 %}
+    			</div>
+    		</div>
+    	</div>
+        
+    	<div class="col s12 l4">
+    		<div class="card red lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Ноябрь</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=11 days=records.11 %}
+    			</div>
+    		</div>
+    	</div>
+    
+    	<div class="col s12 l4">
+    		<div class="card cyan lighten-5">
+    			<div class="card-content">
+                    <h5 class="center-align">Декабрь</h5>
+    				{% include 'includes/calendar/month.html' with year=year month=12 days=records.12 %}
+    			</div>
+    		</div>
+    	</div>
+    </div>
+</div>
+{% endblock content %}
