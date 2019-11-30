@@ -420,3 +420,10 @@ def new_card_view(request, card_type):
                    'form_card': form_card,
                    'formset': formset}
         return render(request, template_name, context)
+
+
+def contacts_view(request):
+    # TODO: Убрать эту погань отсюда в другое место
+
+    template_name = 'general/contacts.html'
+    return render(request, template_name)

@@ -32,7 +32,7 @@
                 {% else %}
                 <li><a href="{% url 'overview' %}">SAME SHEET</a></li>
                 {% endif %}
-                <li><a href="#">Контакты</a></li>
+                <li><a href="{% url 'contacts' %}">Контакты</a></li>
             </ul>
             <ul class="right">
                 {% if user.is_authenticated %}
