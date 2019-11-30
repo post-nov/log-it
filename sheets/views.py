@@ -60,6 +60,22 @@ def _fill_month_with_days(days, records):
     return days
 
 
+def _get_stats(year, month, user):
+    "Выдает 3 вещи: количество записей, последнюю запись, среднюю оценку"
+
+    records = Record.objects.filter(date__year=year,
+                                    date__month=month,
+                                    user=user)
+
+    avg_scr = round(sum(records.values_list('score',flat=True))/len(records),2)
+
+    stats = {'total_records': len(records),
+             'latest_record': records.order_by('-date')[0].date,
+             'average_score': avg_scr}
+    return stats
+
+
+
 def overview(request):
 
     template_name = 'browsing/overview.html'
@@ -84,11 +100,10 @@ def overview(request):
         except:
             record = None
 
-        context = {
-            'days': _fill_month_with_days(raw_days, records),
-            'record': record,
-            'today': today,
-        }
+        context = {'days': _fill_month_with_days(raw_days, records),
+                   'record': record,
+                   'today': today,
+                   'stats': _get_stats(today.year, today.month, request.user)}
         return render(request, template_name, context)
 
 
