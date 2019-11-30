@@ -36,9 +36,13 @@ OVERVIEW
         <div class="card">
             <div class="card-content">
                 <span class="card-title">Статистика</span>
-                <p>Записей в этом месяце: {{ stats.total_records }}</p>
-                <p>Последняя запись: {{ stats.latest_record|date:'d' }}</p>
-                <p>Средняя оценка за 30 дней: {{ stats.average_score }}</p>
+                {% if stats %}
+                    <p>Записей в этом месяце: {{ stats.total_records }}</p>
+                    <p>Последняя запись: {{ stats.latest_record|date:'d' }}</p>
+                    <p>Средняя оценка за 30 дней: {{ stats.average_score }}</p>
+                {% else %}
+                    <p>За этот месяц еще нет записей</p>
+                {% endif %}
             </div>
             <div class="card-action">
                 <a class="blue-text" href="#">Подробнее</a>

@@ -11,34 +11,51 @@
 
 {% block content %}
 
-{% if card_groups %}
-<div class="row">
-
-    {% for card_group in card_groups %}
-    <div class="card col s12 m10 offset-m1 l8 offset-l2 {{ card_group.type.color }} accent-2 mv-2">
-        <div class="card-content">
-            <span class="card-title">{{ card_group.type.name }}</span>
-            {% if card_group.cards %}
-                {% for card in card_group.cards %}
-                    <div class="mv-2 rounded">
-                        <p class="pv-1 ph-1 z-depth-1">{{ card }}</p>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>В этой группе не карточек</p>
-            {% endif %}
-        </div>
-        <div class="card-action right-align">
-            <a class="black-text left" href="{% url 'new_card' card_group.type.name %}">Добавить</a>
-            <a class="black-text" href="#">Архивировать</a>
+<div class="row mv-2">
+    <div class="col s12 l8 offset-l2">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title"><strong>Карточки</strong></span>
+                <p>На этой странице вы можете создавать карточки и группировать
+                их по тематикам (которые вы тоже можете создавать).</p>
+            </div>
         </div>
     </div>
-    {% endfor %}
 </div>
+
+{% if card_groups %}
+
+    <div class="row">
+
+        {% for card_group in card_groups %}
+        <div class="card col s12 m10 offset-m1 l8 offset-l2 {{ card_group.type.color }} accent-2 mv-2">
+            <div class="card-content">
+                <span class="card-title">{{ card_group.type.name }}</span>
+                {% if card_group.cards %}
+                    {% for card in card_group.cards %}
+                        <div class="mv-2 rounded">
+                            <p class="pv-1 ph-1 z-depth-1">{{ card }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>В этой группе не карточек</p>
+                {% endif %}
+            </div>
+            <div class="card-action right-align">
+                <a class="black-text left" href="{% url 'new_card' card_group.type.name %}">Добавить</a>
+                <a class="black-text" href="#">Архивировать</a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
 {% else %}
+
     <div>
         <h5>У вас нет ни одной группы карточек.</h5>
     </div>
+
 {% endif %}
 
 <div class="row mv-2">

@@ -67,13 +67,16 @@ def _get_stats(year, month, user):
                                     date__month=month,
                                     user=user)
 
-    avg_scr = round(sum(records.values_list('score',flat=True))/len(records),2)
+    if records:
+        avg_scr = round(sum(records.values_list('score',flat=True))/len(records),2)
 
-    stats = {'total_records': len(records),
-             'latest_record': records.order_by('-date')[0].date,
-             'average_score': avg_scr}
+        stats = {'total_records': len(records),
+                 'latest_record': records.order_by('-date')[0].date,
+                 'average_score': avg_scr}
+    else:
+        stats = None
+
     return stats
-
 
 
 def overview(request):

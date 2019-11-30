@@ -18,8 +18,18 @@ OVERVIEW
 
 {% block content %}
 
-{# YEAR #}
+<div class="row mv-2">
+    <div class="col s12 l8 offset-l2">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title"><strong>Календарь</strong></span>
+                <p>Вы находитесь в режиме календаря. Здесь вы можете не только смотреть записи по годам, но и добавлять новые.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
+{# YEAR PAGINATION #}
 <div class="center-align mv-2">
     <ul class="pagination">
         <li class="waves-effect"><a href="{% url 'calendar_year' year|sub_one|sub_one  %}"><i class="material-icons">chevron_left</i></a></li>
