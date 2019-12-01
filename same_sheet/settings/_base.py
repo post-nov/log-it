@@ -46,6 +46,7 @@ INSTALLED_APPS = MY_APPS + CORE_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # WHITENOISE
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,6 +54,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+MIDDLEWARE_CLASSES = (
+    # Simplified static file serving.
+    # https://warehouse.python.org/project/whitenoise/
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+)
 
 ROOT_URLCONF = 'same_sheet.urls'
 
@@ -74,8 +81,6 @@ TEMPLATES = [
         },
     },
 ]
-
-STATICFILES_DIRS = [(os.path.join(BASE_DIR, '_static'))]
 
 WSGI_APPLICATION = 'same_sheet.wsgi.application'
 
@@ -132,3 +137,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_DIRS = [(os.path.join(BASE_DIR, '_static'))]
+STATIC_ROOT = (os.path.join(BASE_DIR, 'static'))

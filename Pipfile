@@ -12,6 +12,7 @@ django-debug-toolbar = "*"
 django-materializecss-form = "*"
 django-widget-tweaks = "*"
 gunicorn = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.7"
