@@ -12,6 +12,11 @@
     <script src="{% static 'css/materialize.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
+    <script>
+         $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+    </script>
     {% block js %}
     {% endblock js %}
 
@@ -23,20 +28,28 @@
 
     <nav class="nav-wrapper blue">
         <div class="container">
-            <ul class="left">
+
+            {% if user.is_authenticated %}
+            <a class="show-on-med-and-down brand-logo center" href="{% url 'overview' %}">SAME.SHeet</a>
+            {% else %}
+            <a class="show-on-med-and-down brand-logo center" href="{% url 'home' %}">SAME.SHeet</a>
+            {% endif %}
+
+            <a href="#" data-target="side-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+            <ul class="left hide-on-med-and-down">
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'home' %}">SAME SHEET</a></li>
+                <li><a href="{% url 'home' %}">SAME.SHeet</a></li>
                 <li><a href="{% url 'overview' %}"><strong>Сегодня</strong></a></li>
                 <li><a href="{% url 'calendar_year' %}">Календарь</a></li>
                 <li><a href="{% url 'cards' %}">Карточки</a></li>
                 {% else %}
-                <li><a href="{% url 'overview' %}">SAME SHEET</a></li>
+                <li><a href="{% url 'overview' %}">SAME.SHeet</a></li>
                 {% endif %}
                 <li><a href="{% url 'contacts' %}">Контакты</a></li>
             </ul>
-            <ul class="right">
+            <ul class="right hide-on-med-and-down">
                 {% if user.is_authenticated %}
-                     <li><a href="#">{{ user.username|title }}</a></li>
                      <li><a href="{% url 'logout' %}">Выйти</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Войти</a></li>
@@ -45,6 +58,23 @@
             </ul>
         </div>
     </nav>
+
+    <ul id="side-nav" class="sidenav blue">
+        {% if user.is_authenticated %}
+            <li><a class="white-text" href="{% url 'home' %}">SAME.SHeet</a></li>
+            <li><a class="white-text" href="{% url 'overview' %}"><strong>Сегодня</strong></a></li>
+            <li><a class="white-text" href="{% url 'calendar_year' %}">Календарь</a></li>
+            <li><a class="white-text" href="{% url 'cards' %}">Карточки</a></li>
+            <li><a class="white-text" href="{% url 'contacts' %}">Контакты</a></li>
+            <div class="divider"></div>
+            <li><a class="white-text" href="{% url 'logout' %}">Выйти</a></li>
+        {% else %}
+            <li><a class="white-text" href="{% url 'home' %}">SAME.SHeet</a></li>
+            <div class="divider"></div>
+            <li><a class="white-text" href="{% url 'login' %}">Войти</a></li>
+            <li><a class="white-text" href="{% url 'registration' %}">Зарегистрироваться</a></li>
+        {% endif %}
+    </ul>
 
     <main class="container">
     {% block content %}
