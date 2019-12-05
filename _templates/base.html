@@ -30,9 +30,9 @@
         <div class="container">
 
             {% if user.is_authenticated %}
-            <a class="show-on-med-and-down brand-logo center" href="{% url 'overview' %}">SAME.SHeet</a>
+            <a class="hide-on-large-only brand-logo center" href="{% url 'overview' %}">SAME.SHeet</a>
             {% else %}
-            <a class="show-on-med-and-down brand-logo center" href="{% url 'home' %}">SAME.SHeet</a>
+            <a class="hide-on-large-only brand-logo center" href="{% url 'home' %}">SAME.SHeet</a>
             {% endif %}
 
             <a href="#" data-target="side-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
