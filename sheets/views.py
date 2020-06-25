@@ -38,7 +38,9 @@ calen = calendar.Calendar()
 
 
 def _fill_month_with_days(days, records):
-    " Создает многоуровневый лист "
+    """
+    Создает многоуровневый лист
+    """
 
     days_by_weeks = [days[i:i+7] for i in range(0, len(days), 7)]
     days = []
@@ -61,7 +63,9 @@ def _fill_month_with_days(days, records):
 
 
 def _get_stats(year, month, user):
-    "Выдает 3 вещи: количество записей, последнюю запись, среднюю оценку"
+    """
+    Выдает 3 вещи: количество записей, последнюю запись, среднюю оценку
+    """
 
     records = Record.objects.filter(date__year=year,
                                     date__month=month,
@@ -80,6 +84,9 @@ def _get_stats(year, month, user):
 
 
 def overview(request):
+    """
+    Показать главную страницу
+    """
 
     template_name = 'browsing/overview.html'
 
@@ -111,6 +118,10 @@ def overview(request):
 
 
 def calendar_year_view(request, year=''):
+    """
+    Показать календарный вид
+    """
+
     template_name = 'browsing/calendar_year.html'
     if not year:
         year = timezone.localdate().year
@@ -132,6 +143,10 @@ def calendar_year_view(request, year=''):
 
 
 def record_view(request, year, month, day):
+    """
+    Показать запись
+    """
+
     template_name = 'browsing/record.html'
     date = datetime.date(year, month, day)
 
@@ -231,6 +246,9 @@ def record_view(request, year, month, day):
 
 
 def record_card_view(request, year, month, day, card_type_name, card_name):
+    """
+    Показать карточки дня
+    """
 
     template_name = 'browsing/record_card.html'
     date = datetime.date(year, month, day)
@@ -327,6 +345,10 @@ def record_card_view(request, year, month, day, card_type_name, card_name):
 
 
 def record_card_delete_view(request, year, month, day, card_type_name, card_name):
+    """
+    Показать окно удаления карточки (?)
+    """
+
     template_name = 'browsing/record_card_delete.html'
     date = datetime.date(year, month, day)
     record = Record.objects.get(date=date)
@@ -355,6 +377,9 @@ def record_card_delete_view(request, year, month, day, card_type_name, card_name
 
 
 def cards_view(request):
+    """
+    Показать карточки
+    """
 
     template_name = 'cards/overview.html'
     card_types = CardType.objects.filter(user=request.user)
@@ -368,6 +393,9 @@ def cards_view(request):
 
 
 def new_card_type_view(request):
+    """
+    Показать окно создания нового типа карты
+    """
 
     template_name = 'cards/new_card_type.html'
     AVAILABLE_COLORS = ['red', 'blue', 'light-blue', 'cyan',
@@ -396,6 +424,10 @@ def new_card_type_view(request):
 
 
 def new_card_view(request, card_type):
+    """
+    Показать карту
+    """
+
     template_name = 'cards/new_card.html'
 
     if request.method == 'POST':
@@ -426,6 +458,10 @@ def new_card_view(request, card_type):
 
 
 def contacts_view(request):
+    """
+    Показать окно контактов
+    """
+
     # TODO: Убрать эту погань отсюда в другое место
 
     template_name = 'general/contacts.html'
